@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {Container, Row, Col, Button, Form } from 'react-bootstrap';
 import Logo from '../../components/logo'
-import defaultState from '../../../state/defaultState.js'
 
-function CustomerInfo() {
-    const [formData, setFormData] = useState(defaultState)
-    console.log(formData)
+import { useNavigate } from 'react-router-dom'
+
+function CustomerInfo({formData, setFormData }) {
+    const navigate = useNavigate()
+        const handleButtonClick = () => {
+        navigate('/customerPics')
+  }
     const handleChange = (e) => {
         const {name, value} = e.target
         console.log(value)
@@ -15,6 +18,23 @@ function CustomerInfo() {
     return(
         <Container>
             <Logo/>
+            <Row className="mb-5 text-center">
+                <Col xs={12}>
+                    <h2 className="mb-3">Please complete the form below</h2>
+                    <p className="lead mb-2">
+                    Looking for a specialty Florida plate for your cart?{' '}
+                    <a href="https://www.flhsmv.gov/pdf/specialtyplates/tagbrochure.pdf" target="_blank" rel="noopener noreferrer">
+                        Browse all available options here
+                    </a>
+                    </p>
+                    <p className="lead mb-0">
+                    Considering a customized Florida plate?{' '}
+                    <a href="https://services.flhsmv.gov/MVCheckPersonalPlate/" target="_blank" rel="noopener noreferrer">
+                        Check availability
+                    </a>
+                    </p>
+                </Col>
+            </Row>
             <Form>
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="firstName">
@@ -125,14 +145,15 @@ function CustomerInfo() {
                         </Form.Group>
                     </Row>
                 ): null }
-                <Row className="justify-content-center">
+                <Row className="justify-content-center mb-3">
                     <Col xs="2" className='text-center'>
-                        <Button className='button w-100' type="submit">
-                            Submit
+                        <Button className='button w-100' type="click" onClick={handleButtonClick}>
+                            Next
                         </Button>
                     </Col>
                 </Row>
             </Form>
+            <div style={{ height: '50px' }}></div> {/* Spacer */}
         </Container>
     )
 }

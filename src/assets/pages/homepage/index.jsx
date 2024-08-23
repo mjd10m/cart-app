@@ -45,7 +45,7 @@ function Homepage() {
         </Col>
       </Row>
       <Row className="justify-content-center">
-        <Col xs="2" className="text-center">
+        <Col xs="3" className="text-center">
           <Button className='button' onClick={handleButtonClick}>Get Started</Button>
         </Col>
       </Row>
