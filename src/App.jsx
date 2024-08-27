@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import defaultState from './state/defaultState.js'
 import React, { useState } from 'react'
+import Contact from './assets/pages/contact'
 
 function App() {
   const [formData, setFormData] = useState(defaultState)
@@ -14,8 +15,9 @@ function App() {
     <div>
       <Routes>
         <Route path="/" element = {<Homepage/>} />
-        <Route path="/customerInfo" element = {<CustomerInfo formData ={formData} setFormData = {setFormData}/>} />
-        <Route path="/customerPics" element = {<CustomerPics formData ={formData} setFormData = {setFormData}/>} />
+        <Route path="/contact" element = {<Contact/>} />
+        {/*<Route path="/customerInfo" element = {<CustomerInfo formData ={formData} setFormData = {setFormData}/>} />*/}
+        {/*<Route path="/customerPics" element = {<CustomerPics formData ={formData} setFormData = {setFormData}/>} />*/}
       </Routes>
     </div>
   )
