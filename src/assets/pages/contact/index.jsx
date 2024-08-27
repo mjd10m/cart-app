@@ -13,7 +13,7 @@ const Contact = () => {
         <Logo></Logo>
         <Row className="justify-content-center">
           <Col xs="12" className="text-center">
-            <h2>Feel free to reach out to us anytime via email at <b>mason@tagmycart.com</b> or call us at <b>(813) 553-1369</b>. We’re here to help!</h2>
+            <h2>Feel free to reach out to us anytime via email at <b>info@tagmycart.com</b> or call us at <b>(813) 553-1369</b>. We’re here to help!</h2>
           </Col>
         </Row>
         <Row className="justify-content-center">
