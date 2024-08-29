@@ -31,7 +31,7 @@ function Homepage() {
           </ul>
         </Col>
         <Col xs="5">
-          <h5>What does my cart need to be legal?</h5>
+          <h5>What documents do I need to start the process?</h5>
           <ul>
             <li>Pictures of cart (All 4Corners)</li>
             <li>Picture of DOT stamp on windshield</li>
