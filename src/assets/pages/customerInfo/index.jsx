@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom'
 
 function CustomerInfo({formData, setFormData }) {
     const navigate = useNavigate()
-        const handleButtonClick = () => {
-        navigate('/customerPics')
+    const handleButtonClick = () => {
+    navigate('/customerPics')
   }
     const handleChange = (e) => {
         const {name, value} = e.target

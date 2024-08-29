@@ -25,6 +25,10 @@ function CustomerPics({formData, setFormData }) {
         console.log(files[0].name)
         console.log(uploadFiles)
     }
+    const navigate = useNavigate()
+    const handleSubmit = () => {
+        navigate('/summary')
+    }
     return(
         <Container>
             <Logo></Logo>
@@ -88,7 +92,7 @@ function CustomerPics({formData, setFormData }) {
                 </Row>
                 <Row className="justify-content-center mb-3">
                     <Col xs="2" className='text-center'>
-                        <Button className='button w-100' type="click">
+                        <Button className='button w-100' type="click"onClick={handleSubmit}>
                             Submit
                         </Button>
                     </Col>

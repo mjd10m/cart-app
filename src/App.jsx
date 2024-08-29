@@ -7,6 +7,7 @@ import './App.css'
 import defaultState from './state/defaultState.js'
 import React, { useState } from 'react'
 import Contact from './assets/pages/contact'
+import Summary from './assets/pages/summary/index.jsx'
 
 function App() {
   const [formData, setFormData] = useState(defaultState)
@@ -16,8 +17,9 @@ function App() {
       <Routes>
         <Route path="/" element = {<Homepage/>} />
         <Route path="/contact" element = {<Contact/>} />
-        {/*<Route path="/customerInfo" element = {<CustomerInfo formData ={formData} setFormData = {setFormData}/>} />*/}
-        {/*<Route path="/customerPics" element = {<CustomerPics formData ={formData} setFormData = {setFormData}/>} />*/}
+        <Route path="/customerInfo" element = {<CustomerInfo formData ={formData} setFormData = {setFormData}/>} />
+        <Route path="/customerPics" element = {<CustomerPics formData ={formData} setFormData = {setFormData}/>} />
+        <Route path='/summary' element={<Summary/>}/>
       </Routes>
     </div>
   )
