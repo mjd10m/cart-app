@@ -6,9 +6,7 @@ function Logo() {
     return(
           <Row className="justify-content-center">
             <Col xs="12">
-                <a href="/">
-                  <img src={logo} alt="Logo" style={{ display: 'block', margin: '0 auto' }} />
-                </a> 
+              <img src={logo} alt="Logo" style={{ display: 'block', margin: '0 auto' }} />
             </Col>
           </Row>
     )
