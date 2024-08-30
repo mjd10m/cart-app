@@ -1,4 +1,4 @@
-import Customer from './Customer'
+const Customer = require('./Customer')
 
 
-export default { Customer }
+module.exports = { Customer }

@@ -1,4 +1,4 @@
-const { Customer } = require('../models/index').default
+const { Customer } = require('../models/index')
 
 const resolvers = {
     Query: {
@@ -13,7 +13,7 @@ const resolvers = {
             try {
                 const customer = await Customer.create({ ...args });
                 console.log(customer);
-                return {customer};
+                return customer;
             } catch (error) {
                 console.error('Error creating customer:', error);
                 throw new Error('Failed to create customer');
@@ -21,3 +21,5 @@ const resolvers = {
         }
     }
 }
+
+module.exports= resolvers
