@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import {Container, Row, Col, Button, Form } from 'react-bootstrap';
 import Logo from '../../components/logo'
 import { useNavigate } from 'react-router-dom'
+import { useMutation } from '@apollo/client'
+import {ADD_CUSTOMER} from '../../../utils/mutations'
 
 
 function CustomerPics({formData, setFormData }) {
@@ -16,6 +18,7 @@ function CustomerPics({formData, setFormData }) {
         invoice: null,
         receipt: null
     })
+    const [addCustomer] = useMutation(ADD_CUSTOMER)
     const handleFileChange = (e) => {
         const {name, files} = e.target
         setUploadFiles(prevFiles =>({
@@ -26,8 +29,18 @@ function CustomerPics({formData, setFormData }) {
         console.log(uploadFiles)
     }
     const navigate = useNavigate()
-    const handleSubmit = () => {
-        navigate('/summary')
+    async function handleSubmit(e) {
+        e.preventDefault()
+        try {
+            const {data} = await addCustomer({
+                variables: {...formData},
+            })
+            console.log(data)
+            // navigate('/summary')
+        } catch (error) {
+            const errorMessage = error.message
+            console.log(errorMessage)
+        }
     }
     return(
         <Container>
@@ -43,7 +56,7 @@ function CustomerPics({formData, setFormData }) {
                 </Col>
             </Row>
             
-            <Form>
+            <Form onSubmit={handleSubmit}>
                 <Row className="mb-3">
                     <Form.Group as={Col} xs ={6} controlId="frontRight">
                     <Form.Label>Front Right </Form.Label>
@@ -92,7 +105,7 @@ function CustomerPics({formData, setFormData }) {
                 </Row>
                 <Row className="justify-content-center mb-3">
                     <Col xs="2" className='text-center'>
-                        <Button className='button w-100' type="click"onClick={handleSubmit}>
+                        <Button className='button w-100' type="submit">
                             Submit
                         </Button>
                     </Col>
