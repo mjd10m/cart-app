@@ -18,6 +18,13 @@ function CustomerPics({formData, setFormData }) {
         invoice: null,
         receipt: null
     })
+    console.log(formData)
+    function renameFile(file, newFileName) {
+        return new File([file], newFileName, {
+            type: file.type,
+            lastModified: file.lastModified
+        })
+    }
     const [addCustomer] = useMutation(ADD_CUSTOMER)
     const handleFileChange = (e) => {
         const {name, files} = e.target
@@ -31,16 +38,24 @@ function CustomerPics({formData, setFormData }) {
     const navigate = useNavigate()
     async function handleSubmit(e) {
         e.preventDefault()
-        try {
-            const {data} = await addCustomer({
-                variables: {...formData},
-            })
-            console.log(data)
-            // navigate('/summary')
-        } catch (error) {
-            const errorMessage = error.message
-            console.log(errorMessage)
-        }
+        let fileArray = []
+        Object.entries(uploadFiles).forEach(([key,value]) => {
+            if(value !== null) {
+                const renamedFile = renameFile(value, formData.transactionId + key)
+                fileArray.push(renamedFile)
+            }
+        })
+        console.log(fileArray)
+        // try {
+        //     const {data} = await addCustomer({
+        //         variables: {...formData},
+        //     })
+        //     console.log(data)
+        //     // navigate('/summary')
+        // } catch (error) {
+        //     const errorMessage = error.message
+        //     console.log(errorMessage)
+        // }
     }
     return(
         <Container>

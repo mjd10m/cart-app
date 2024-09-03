@@ -3,31 +3,44 @@ import {Container, Row, Col, Button, Form } from 'react-bootstrap';
 import Logo from '../../components/logo'
 import * as yup from 'yup'
 import * as formik from 'formik'
+import { customAlphabet } from 'nanoid'
 
 import { useNavigate } from 'react-router-dom'
 
 function CustomerInfo({formData, setFormData }) {
     const {Formik} = formik
-    const schema = yup.object().shape({
+    const validationSchema = yup.object().shape({
         firstName: yup.string().required('First Name is Required'),
         lastName: yup.string().required('Last Name is Required'),
         dob: yup.string().required('Date of Birth is Required'),
-        dob: yup.string().required('Date of Birth is Required'),
-        dob: yup.string().required('Date of Birth is Required'),
-        dob: yup.string().required('Date of Birth is Required'),
-        dob: yup.string().required('Date of Birth is Required'),
-        dob: yup.string().required('Date of Birth is Required'),
-        dob: yup.string().required('Date of Birth is Required'),
-        dob: yup.string().required('Date of Birth is Required'),
-        dob: yup.string().required('Date of Birth is Required'),
-        dob: yup.string().required('Date of Birth is Required'),
+        addr1: yup.string().required('Address is Required'),
+        addr2: yup.string(),
+        city: yup.string().required('City is Required'),
+        state: yup.string().required('State is Required'),
+        zip: yup.string().required('Zipcode is Required'),
+        email: yup.string().email('Invalid email address').required('Email is Required'),
+        phone: yup.string().required('Phone Number is Required'),
+        cartSize: yup.string().required('Cart Size is Required'),
+        cartColor: yup.string().required('Car Color is Required'),
+        plate: yup.string().required('Plate Option is Required'),
+        plateNum: yup.string().when('plate', {
+            is: (plate) => {return plate == 'plateTransfer' || plate == 'custPlate'},
+            then: () => yup.string().required('Plate Number is required'),
+            otherwise: () => yup.string().notRequired(),
+        }),
+        plateType: yup.string().when('plate', {
+            is: (plate) => {return plate === 'specPlate' || plate === 'custPlate'},
+            then:() => yup.string().required('Plate Type is Required'),
+            otherwise:() => yup.string().notRequired(),
+        })
     })
 
     const navigate = useNavigate()
+    const nanoid = customAlphabet('1234567890', 10)
     const handleSubmit = (values) => {
-
-        setFormData({...formData, ...values})
-    //navigate('/customerPics')
+        const id = nanoid()
+        setFormData({...formData, ...values, transactionId:id})
+        navigate('/customerPics')
   }
     useEffect(() => {
         console.log('formData updated:', formData);
@@ -57,7 +70,7 @@ function CustomerInfo({formData, setFormData }) {
                     </p>
                 </Col>
             </Row>
-                <Formik validationSchema={schema} onSubmit={handleSubmit} initialValues={{...formData}}>
+                <Formik validationSchema={validationSchema} onSubmit={handleSubmit} initialValues={{...formData}}>
                 {({handleSubmit, handleChange, values, touched, errors  }) => (
                 <Form noValidate onSubmit={handleSubmit}>
                     <Row className="mb-3">
@@ -88,7 +101,8 @@ function CustomerInfo({formData, setFormData }) {
 
                         <Form.Group as={Col} className="mb-3" controlId="address2">
                             <Form.Label>Address Line 2</Form.Label>
-                            <Form.Control type="text" name="addr2" value = {values.addr2} onChange={handleChange} />
+                            <Form.Control type="text" name="addr2" value = {values.addr2} onChange={handleChange} isInvalid={touched.addr1 && !!errors.addr1} />
+                            <Form.Control.Feedback type='invalid'>{errors.addr1}</Form.Control.Feedback>
                         </Form.Group>
                     </Row>    
                     

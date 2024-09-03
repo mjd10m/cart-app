@@ -12,9 +12,8 @@ const defaultState = {
     cartSize: '',
     cartColor: '',
     plate: '',
-    plateNum:''
-
-
+    plateNum:'',
+    plateType:''
   };
   
   export default defaultState;
