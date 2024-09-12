@@ -125,7 +125,7 @@ function CustomerInfo({formData, setFormData }) {
                         <Form.Control.Feedback type='invalid'>{errors.zip}</Form.Control.Feedback>
                         </Form.Group>
                     </Row>
-                    <Row>
+                    <Row className="mb-3">
                     <Form.Group as={Col} controlId="email">
                         <Form.Label>Email</Form.Label>
                         <Form.Control type="email" name="email" value = {values.email} onChange={handleChange} isInvalid={touched.email && !!errors.email}/>

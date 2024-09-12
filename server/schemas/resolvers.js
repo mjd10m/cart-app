@@ -1,6 +1,10 @@
-const { Customer, File } = require('../models/index')
+const { Customer, File } = require('../models/index');
+const bucket = require('../config/gcloud')
+
 
 const resolvers = {
+    Upload: require('graphql-upload').GraphQLUpload,
+
     Query: {
         listCustomers: async () => {
             return Customer.find()
@@ -27,8 +31,38 @@ const resolvers = {
             const uploadedFiles = await Promise.all(
                 args.map(async file => {
                     const {createReadStream, filename, mimetype, encoding, transactionId} = await file
+                    const blob = bucket.file(filename)
+                    const blobStream = blob.createWriteStream({
+                        resumable:false
+                    })
+
+                    return new Promise((resolve, reject) => {
+                        createReadStream()
+                        .pipe(blobStream)
+                        .on('finish', async () => {
+                            const publicUrl = `https://storage.googleapis.com/${bucket.name}/${filename}`
+
+                            const newFile = new File({
+                                filename,
+                                mimetype,
+                                encoding,
+                                url: publicUrl,
+                                transactionId: transactionId
+                              });
+                              await newFile.save();
+
+                            resolve({
+                                filename,
+                                mimetype,
+                                encoding,
+                                url: publicUrl
+                            })
+                        })
+                        .on ('error', (err) => reject(err))
+                    })
                 })
             )
+            return uploadedFiles
         }
     }
 }

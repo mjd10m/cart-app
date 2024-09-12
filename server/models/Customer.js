@@ -69,6 +69,10 @@ const customerSchema = new Schema(
         plateNum: {
             type: String,
             trim: true
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now
         }
     }
 );

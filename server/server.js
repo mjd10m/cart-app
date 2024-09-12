@@ -4,28 +4,22 @@ const path = require('path');
 const {typeDefs, resolvers} = require('./schemas');
 const db = require('./config/connection');
 const cors = require('cors');
-const multer = require('multer');
 const dotenv = require('dotenv');
-const {Storage} = require('@google-cloud/storage') 
+const { graphqlUploadExpress } = require('graphql-upload');
+
+dotenv.config()
 
 const PORT = process.env.PORT || 3001;
 const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
-const gc = new Storage({
-  keyFilename: path.join(__dirname,"./orbital-stage-423917-i7-2f18fb5b78cb"),
-  projectId: 'tag-my-cart'
-})
-
-const bucket = gc.bucket('cart-app-storage')
-
-googleCloud.getBuckets().then(x => console.log(x))
 
 const app = express();
 app.use(cors())
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
 const startApolloServer = async (typeDefs, resolvers) => {
     await server.start();

@@ -21,6 +21,10 @@ const fileSchema = new Schema(
         transactionId: {
             type: String,
             trim: true
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now
         }
     }
 );
