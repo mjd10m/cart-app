@@ -1,9 +1,10 @@
 const { Customer, File } = require('../models/index');
 const bucket = require('../config/gcloud')
+const {GraphQLUpload} = require("graphql-upload")
 
 
 const resolvers = {
-    Upload: require('graphql-upload').GraphQLUpload,
+    Upload: GraphQLUpload,
 
     Query: {
         listCustomers: async () => {
