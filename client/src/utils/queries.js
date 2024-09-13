@@ -4,6 +4,7 @@ export const QUERY_CUSTOMERS = gql`
     query Query {
         listCustomers {
             _id
+            transactionId
             firstName
             lastName
             dob
@@ -18,6 +19,19 @@ export const QUERY_CUSTOMERS = gql`
             cartColor
             plate
             plateNum
+            plateType
+            createdAt
+        }
+    }
+`
+export const QUERY_FILES = gql `
+    query ListFiles {
+        listFiles {
+            filename
+            mimetype
+            encoding
+            url
+            createdAt
         }
     }
 `

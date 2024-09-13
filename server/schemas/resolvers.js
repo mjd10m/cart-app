@@ -28,10 +28,11 @@ const resolvers = {
                 throw new Error('Failed to create customer');
             }
         },
-        uploadFiles: async (parent,{args}) => {
+        uploadFiles: async (parent,{files, transactionId}) => {
+            console.log(transactionId)            
             const uploadedFiles = await Promise.all(
-                args.map(async file => {
-                    const {createReadStream, filename, mimetype, encoding, transactionId} = await file
+                files.map(async file => {
+                    const {createReadStream, filename, mimetype, encoding} = await file
                     const blob = bucket.file(filename)
                     const blobStream = blob.createWriteStream({
                         resumable:false
@@ -42,21 +43,22 @@ const resolvers = {
                         .pipe(blobStream)
                         .on('finish', async () => {
                             const publicUrl = `https://storage.googleapis.com/${bucket.name}/${filename}`
-
-                            const newFile = new File({
+                            console.log(transactionId) 
+                            const savedFile = await File.create({
                                 filename,
                                 mimetype,
                                 encoding,
                                 url: publicUrl,
-                                transactionId: transactionId
+                                transactionId
                               });
-                              await newFile.save();
-
+                              console.log('Saved file:', savedFile)
                             resolve({
                                 filename,
                                 mimetype,
                                 encoding,
-                                url: publicUrl
+                                url: publicUrl,
+                                transactionId: savedFile.transactionId,
+                                createdAt: savedFile.createdAt
                             })
                         })
                         .on ('error', (err) => reject(err))

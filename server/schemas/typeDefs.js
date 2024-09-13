@@ -28,6 +28,7 @@ const typeDefs = gql`
         mimetype: String!
         encoding: String!
         url: String!
+        transactionId: String!
         createdAt: Date!
     }
     type Query {
@@ -35,8 +36,8 @@ const typeDefs = gql`
         listFiles: [File]
     }
     type Mutation {
-        addCustomer(firstName: String!, lastName: String!, dob: Date!, addr1: String!, addr2: String, city: String!, state: String!, zip: String!, email: String!, phone: String!, cartSize: String!, cartColor: String!, plate: String!, plateNum: String): Customer
-        uploadFiles(files: [Upload!]!): [File!]!
+        addCustomer(transactionId: String!, firstName: String!, lastName: String!, dob: Date!, addr1: String!, addr2: String, city: String!, state: String!, zip: String!, email: String!, phone: String!, cartSize: String!, cartColor: String!, plate: String!, plateNum: String): Customer
+        uploadFiles(files: [Upload!]!, transactionId: String!): [File!]!
     }
 `;
 

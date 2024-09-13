@@ -8,3 +8,13 @@ export const ADD_CUSTOMER = gql `
         }
     }
 `
+export const UPLOAD_FILE = gql `
+    mutation Mutation($files: [Upload!]!, $transactionId: String!) {
+        uploadFiles(files: $files, transactionId: $transactionId) {
+            filename
+            url
+            transactionId
+            createdAt
+        }
+    }
+`

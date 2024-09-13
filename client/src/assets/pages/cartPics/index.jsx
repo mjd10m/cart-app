@@ -3,7 +3,7 @@ import {Container, Row, Col, Button, Form } from 'react-bootstrap';
 import Logo from '../../components/logo'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
-import {ADD_CUSTOMER} from '../../../utils/mutations'
+import {ADD_CUSTOMER, UPLOAD_FILE} from '../../../utils/mutations'
 
 
 function CustomerPics({formData, setFormData }) {
@@ -26,6 +26,7 @@ function CustomerPics({formData, setFormData }) {
         })
     }
     const [addCustomer] = useMutation(ADD_CUSTOMER)
+    const [uploadFile] = useMutation(UPLOAD_FILE)
     const handleFileChange = (e) => {
         const {name, files} = e.target
         setUploadFiles(prevFiles =>({
@@ -46,16 +47,25 @@ function CustomerPics({formData, setFormData }) {
             }
         })
         console.log(fileArray)
-        // try {
-        //     const {data} = await addCustomer({
-        //         variables: {...formData},
-        //     })
-        //     console.log(data)
-        //     // navigate('/summary')
-        // } catch (error) {
-        //     const errorMessage = error.message
-        //     console.log(errorMessage)
-        // }
+        try {
+            const upload = await uploadFile({
+                variables: {fileArray, transactionId: formData.transactionId}
+            })
+            console.log(upload)
+        } catch (error) {
+            const errorMessage = error.message
+            console.log(errorMessage)
+        }
+        try {
+            const {data} = await addCustomer({
+                variables: {...formData},
+            })
+            console.log(data)
+            // navigate('/summary')
+        } catch (error) {
+            const errorMessage = error.message
+            console.log(errorMessage)
+        }
     }
     return(
         <Container>

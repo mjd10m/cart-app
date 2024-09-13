@@ -1,13 +1,12 @@
+require('dotenv').config();
 const express = require('express')
 const {ApolloServer} = require('apollo-server-express')
 const path = require('path');
 const {typeDefs, resolvers} = require('./schemas');
 const db = require('./config/connection');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const { graphqlUploadExpress } = require('graphql-upload');
 
-dotenv.config()
 
 const PORT = process.env.PORT || 3001;
 const server = new ApolloServer({
@@ -19,7 +18,7 @@ const app = express();
 app.use(cors())
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
+app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
 
 const startApolloServer = async (typeDefs, resolvers) => {
     await server.start();
