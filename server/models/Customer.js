@@ -2,6 +2,11 @@ const { Schema, model, SchemaTypes } = require('mongoose');
 
 const customerSchema = new Schema(
     {
+        transactionId: {
+            type: String,
+            required: true,
+            trim: true
+        },
         firstName: {
             type: String,
             required: true,
@@ -67,6 +72,10 @@ const customerSchema = new Schema(
             trim: true
         },
         plateNum: {
+            type: String,
+            trim: true
+        },
+        plateType: {
             type: String,
             trim: true
         },

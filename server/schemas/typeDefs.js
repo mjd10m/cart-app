@@ -36,7 +36,7 @@ const typeDefs = gql`
         listFiles: [File]
     }
     type Mutation {
-        addCustomer(transactionId: String!, firstName: String!, lastName: String!, dob: Date!, addr1: String!, addr2: String, city: String!, state: String!, zip: String!, email: String!, phone: String!, cartSize: String!, cartColor: String!, plate: String!, plateNum: String): Customer
+        addCustomer(transactionId: String!, firstName: String!, lastName: String!, dob: Date!, addr1: String!, addr2: String, city: String!, state: String!, zip: String!, email: String!, phone: String!, cartSize: String!, cartColor: String!, plate: String!, plateNum: String, plateType: String): Customer
         uploadFiles(files: [Upload!]!, transactionId: String!): [File!]!
     }
 `;

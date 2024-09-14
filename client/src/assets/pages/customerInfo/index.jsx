@@ -12,7 +12,7 @@ function CustomerInfo({formData, setFormData }) {
     const validationSchema = yup.object().shape({
         firstName: yup.string().required('First Name is Required'),
         lastName: yup.string().required('Last Name is Required'),
-        dob: yup.string().required('Date of Birth is Required'),
+        dob: yup.date().required('Date of Birth is Required'),
         addr1: yup.string().required('Address is Required'),
         addr2: yup.string(),
         city: yup.string().required('City is Required'),

@@ -9,10 +9,11 @@ import React, { useState } from 'react'
 import Contact from './assets/pages/contact'
 import Summary from './assets/pages/summary/index.jsx'
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink} from '@apollo/client';
+import {createUploadLink} from 'apollo-upload-client'
 
 function App() {
   const [formData, setFormData] = useState(defaultState)
-  const httpLink = createHttpLink({
+  const httpLink = createUploadLink({
     uri: 'http://localhost:3001/graphql',
   });
   const client = new ApolloClient({

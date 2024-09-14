@@ -40,16 +40,19 @@ function CustomerPics({formData, setFormData }) {
     async function handleSubmit(e) {
         e.preventDefault()
         let fileArray = []
-        Object.entries(uploadFiles).forEach(([key,value]) => {
-            if(value !== null) {
-                const renamedFile = renameFile(value, formData.transactionId + key)
-                fileArray.push(renamedFile)
-            }
-        })
+        await Promise.all(
+            Object.entries(uploadFiles).map(([key,value]) => {
+                if(value !== null) {
+                    const renamedFile = renameFile(value, formData.transactionId + key)
+                    fileArray.push(renamedFile)
+                }
+            })
+        )
         console.log(fileArray)
+        console.log(formData.transactionId)
         try {
             const upload = await uploadFile({
-                variables: {fileArray, transactionId: formData.transactionId}
+                variables: {files: fileArray, transactionId: formData.transactionId}
             })
             console.log(upload)
         } catch (error) {
@@ -61,7 +64,7 @@ function CustomerPics({formData, setFormData }) {
                 variables: {...formData},
             })
             console.log(data)
-            // navigate('/summary')
+            navigate('/summary')
         } catch (error) {
             const errorMessage = error.message
             console.log(errorMessage)
