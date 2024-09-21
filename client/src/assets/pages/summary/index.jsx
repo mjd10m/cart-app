@@ -2,7 +2,7 @@ import React from 'react'
 import {Container, Row, Col, Button, Form } from 'react-bootstrap';
 import Logo from '../../components/logo'
 
-function Summary () {
+function Summary ({formData}) {
 
     return(
         <Container>
@@ -14,7 +14,7 @@ function Summary () {
             </Row>
             <Row className="justify-content-center">
                 <Col xs="12" className="text-center">
-                    <h3>Your transaction ID is 10293845</h3>
+                    <h3>Your transaction ID is {formData.transactionId}</h3>
                 </Col>
             </Row>
             <Row className="justify-content-center">

@@ -20,6 +20,7 @@ function App() {
     link: httpLink,
     cache: new InMemoryCache(),
   });
+  console.log(formData)
   return (
     <div>
       <ApolloProvider client={client}>
@@ -28,7 +29,7 @@ function App() {
           <Route path="/contact" element = {<Contact/>} />
           <Route path="/customerInfo" element = {<CustomerInfo formData ={formData} setFormData = {setFormData}/>} />
           <Route path="/customerPics" element = {<CustomerPics formData ={formData} setFormData = {setFormData}/>} />
-          <Route path='/summary' element={<Summary/>}/>
+          <Route path='/summary' element={<Summary formData={formData}/>}/>
         </Routes>
       </ApolloProvider>
     </div>
