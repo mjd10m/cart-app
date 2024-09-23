@@ -20,7 +20,6 @@ function App() {
     link: httpLink,
     cache: new InMemoryCache(),
   });
-  console.log(formData)
   return (
     <div>
       <ApolloProvider client={client}>
