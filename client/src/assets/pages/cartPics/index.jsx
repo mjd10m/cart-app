@@ -4,6 +4,7 @@ import Logo from '../../components/logo'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
 import {ADD_CUSTOMER, UPLOAD_FILE} from '../../../utils/mutations'
+import Topbar from '../../components/topbar';
 
 
 function CustomerPics({formData, setFormData }) {
@@ -72,7 +73,7 @@ function CustomerPics({formData, setFormData }) {
     }
     return(
         <Container>
-            <Logo></Logo>
+            <Topbar/>
             <Row className="mb-5 text-center">
                 <Col xs={12}>
                     <h2 className="mb-3">Please upload the required images as indicated below</h2>

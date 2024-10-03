@@ -44,8 +44,10 @@ function CustomerInfo({formData, setFormData }) {
             newPrice = '628.35'
         } else if (value === "specPlate") {
             newPrice = '858.35'
-        } else if (value === "custPlate") {
+        } else if (value === "perPlate") {
             newPrice = '888.35'
+        } else if (value === "perSpecPlate") {
+            newPrice = '923.35'
         }
         setTotalPrice(newPrice)
     }
@@ -59,7 +61,12 @@ function CustomerInfo({formData, setFormData }) {
     useEffect(() => {
         console.log('formData updated:', formData);
     }, [formData]);
-
+    const passengerOptions = () => {
+        let options =[]
+        for(let i = 2; i = 10; i++){
+            options.push(<option key={i} value={i}>{i}</option>)
+        } 
+    }
     // const handleChange = (e) => {
     //     const {name, value} = e.target
     //     setFormData({...formData,[name]: value})
@@ -156,8 +163,14 @@ function CustomerInfo({formData, setFormData }) {
 
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="cartSize">
-                    <Form.Label>Cart Size</Form.Label>
-                    <Form.Control type="text" name="cartSize" value = {values.cartSize} onChange={handleChange} isInvalid={touched.cartSize && !!errors.cartSize}/>
+                    <Form.Label>Number of Passengers</Form.Label>
+                    <Form.Select type="text" name="cartSize" value = {values.cartSize} onChange={handleChange} isInvalid={touched.cartSize && !!errors.cartSize}>
+                        <option value="">Select</option>
+                        <option value="2">2</option>
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                        <option value="8">8</option>
+                    </Form.Select>
                     <Form.Control.Feedback type='invalid'>{errors.cartSize}</Form.Control.Feedback>
                     </Form.Group>
 
@@ -174,7 +187,8 @@ function CustomerInfo({formData, setFormData }) {
                             <option value="newPlate">New Plate</option>
                             <option value="plateTransfer">Plate Transfer</option>
                             <option value="specPlate">Speciality Plate</option>
-                            <option value="custPlate">Customized Plate</option>
+                            <option value="perPlate">Personalized Plate</option>
+                            <option value="perSpecPlate">Personalized Speciality Plate</option>
                         </Form.Select>
                         <Form.Control.Feedback type='invalid'>{errors.plate}</Form.Control.Feedback>
                     </Form.Group>
@@ -199,8 +213,17 @@ function CustomerInfo({formData, setFormData }) {
                         </Form.Group>
                         </Row>
                 ): null }
-
                 {values.plate === "custPlate" ?(
+                    <Row className="mb-3 justify-content-center">
+                        <Form.Group as={Col} xs={4} controlId="plateNum" className=''>
+                            <Form.Label>Plate Number</Form.Label>
+                            <Form.Control type="text" name="plateNum" value = {values.plateNum} onChange={handleChange} isInvalid={touched.plateNum && !!errors.plateNum} />
+                            <Form.Control.Feedback type='invalid'>{errors.plateNum}</Form.Control.Feedback>
+                        </Form.Group>
+                    </Row>
+                ): null }
+
+                {values.plate === "custSpecPlate" ?(
                     <Row className="mb-3 justify-content-center">
                         <Form.Group as={Col} xs={4} controlId="plateNum">
                             <Form.Label>Plate Number</Form.Label>
