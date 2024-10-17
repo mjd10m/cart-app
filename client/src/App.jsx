@@ -13,6 +13,7 @@ import {createUploadLink} from 'apollo-upload-client'
 
 function App() {
   const [formData, setFormData] = useState(defaultState)
+  const [totalPrice, setTotalPrice] = useState('828.35')
   const httpLink = createUploadLink({
     uri: 'http://localhost:3001/graphql',
   });
@@ -26,8 +27,8 @@ function App() {
         <Routes>
           <Route path="/" element = {<Homepage/>} />
           <Route path="/contact" element = {<Contact/>} />
-          <Route path="/customerInfo" element = {<CustomerInfo formData ={formData} setFormData = {setFormData}/>} />
-          <Route path="/customerPics" element = {<CustomerPics formData ={formData} setFormData = {setFormData}/>} />
+          <Route path="/customerInfo" element = {<CustomerInfo formData ={formData} setFormData = {setFormData} totalPrice = {totalPrice} setTotalPrice = {setTotalPrice}/>} />
+          <Route path="/customerPics" element = {<CustomerPics formData ={formData} totalPrice = {totalPrice}/>} />
           <Route path='/summary' element={<Summary formData={formData}/>}/>
         </Routes>
       </ApolloProvider>

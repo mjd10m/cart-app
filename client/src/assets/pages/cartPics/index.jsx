@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {Container, Row, Col, Button, Form } from 'react-bootstrap';
+import {Container, Row, Col, Button, Form, Spinner } from 'react-bootstrap';
 import Logo from '../../components/logo'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
@@ -7,7 +7,7 @@ import {ADD_CUSTOMER, UPLOAD_FILE} from '../../../utils/mutations'
 import Topbar from '../../components/topbar';
 
 
-function CustomerPics({formData, setFormData }) {
+function CustomerPics({formData, totalPrice }) {
     const [uploadFiles, setUploadFiles] = useState({
         frontRight:null,
         frontLeft:null,
@@ -17,9 +17,11 @@ function CustomerPics({formData, setFormData }) {
         dotStamp:null,
         vinPlate: null,
         invoice: null,
-        receipt: null
+        receipt: []
     })
+    const [isLoading, setIsLoading] = useState(false)
     console.log(formData)
+    console.log(uploadFiles)
     function renameFile(file, newFileName) {
         return new File([file], newFileName, {
             type: file.type,
@@ -30,22 +32,48 @@ function CustomerPics({formData, setFormData }) {
     const [uploadFile] = useMutation(UPLOAD_FILE)
     const handleFileChange = (e) => {
         const {name, files} = e.target
-        setUploadFiles(prevFiles =>({
-            ...prevFiles,
-            [name]: files[0]
-        }))
+        console.log(name)
+        console.log(files.length)
+        if(name === "receipt") {
+            let receiptFileArray = []
+            Array.from(files).forEach(file => {
+                receiptFileArray.push(file)
+            });
+            console.log(receiptFileArray)
+            setUploadFiles(prevFiles => ({
+                ...prevFiles,
+                receipt: receiptFileArray
+            }));
+        }
+        else {
+            setUploadFiles(prevFiles =>({
+                ...prevFiles,
+                [name]: files[0]
+            }))
+        }
         console.log(files[0].name)
         console.log(uploadFiles)
     }
     const navigate = useNavigate()
     async function handleSubmit(e) {
         e.preventDefault()
+        setIsLoading(true)
         let fileArray = []
         await Promise.all(
             Object.entries(uploadFiles).map(([key,value]) => {
                 if(value !== null) {
-                    const renamedFile = renameFile(value, formData.transactionId + key)
-                    fileArray.push(renamedFile)
+                    if (key === "receipt") {
+                        for (let i = 0; i < value.length; i++) {
+                            console.log(value)
+                            console.log(value[i])
+                            const renamedFile = renameFile(value[i], formData.transactionId + key + i)
+                            fileArray.push(renamedFile)  
+                        }
+                    } else {
+                        const renamedFile = renameFile(value, formData.transactionId + key)
+                        fileArray.push(renamedFile)
+                    }
+                    
                 }
             })
         )
@@ -73,7 +101,7 @@ function CustomerPics({formData, setFormData }) {
     }
     return(
         <Container>
-            <Topbar/>
+            <Topbar totalPrice = {totalPrice}/>
             <Row className="mb-5 text-center">
                 <Col xs={12}>
                     <h2 className="mb-3">Please upload the required images as indicated below</h2>
@@ -129,13 +157,26 @@ function CustomerPics({formData, setFormData }) {
                 <Row className='mb-3'>
                     <Form.Group as={Col} xs ={6} controlId="receipt">
                     <Form.Label>Receipts for DOT parts</Form.Label>
-                    <Form.Control type="file" name="receipt" onChange={handleFileChange}/>
+                    <Form.Control type="file" name="receipt" onChange={handleFileChange} multiple/>
                     </Form.Group>
                 </Row>
                 <Row className="justify-content-center mb-3">
                     <Col xs="2" className='text-center'>
-                        <Button className='button w-100' type="submit">
-                            Submit
+                        <Button className='button w-auto' type="submit"disabled={isLoading}>
+                        {isLoading ? (
+                    <>
+                        <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                        />
+                        Uploading Files...
+                    </>
+                ) : (
+                    'Submit'
+                )}
                         </Button>
                     </Col>
                 </Row>

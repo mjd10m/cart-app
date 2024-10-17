@@ -8,8 +8,7 @@ import Topbar from '../../components/topbar'
 
 import { useNavigate } from 'react-router-dom'
 
-function CustomerInfo({formData, setFormData }) {
-    const [totalPrice, setTotalPrice] = useState('828.35')
+function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
     const {Formik} = formik
     const validationSchema = yup.object().shape({
         firstName: yup.string().required('First Name is Required'),
@@ -213,7 +212,7 @@ function CustomerInfo({formData, setFormData }) {
                         </Form.Group>
                         </Row>
                 ): null }
-                {values.plate === "custPlate" ?(
+                {values.plate === "perPlate" ?(
                     <Row className="mb-3 justify-content-center">
                         <Form.Group as={Col} xs={4} controlId="plateNum" className=''>
                             <Form.Label>Plate Number</Form.Label>
@@ -223,7 +222,7 @@ function CustomerInfo({formData, setFormData }) {
                     </Row>
                 ): null }
 
-                {values.plate === "custSpecPlate" ?(
+                {values.plate === "perSpecPlate" ?(
                     <Row className="mb-3 justify-content-center">
                         <Form.Group as={Col} xs={4} controlId="plateNum">
                             <Form.Label>Plate Number</Form.Label>
