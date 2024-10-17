@@ -19,6 +19,10 @@ app.use(cors())
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
+app.use(express.static(path.join(__dirname, '../client/dist')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '../client/dist/index.html'));
+});
 
 const startApolloServer = async (typeDefs, resolvers) => {
     await server.start();

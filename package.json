@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-     "build": "cd client && npm run build",
-     "develop": "concurrently \"cd server && node server.js\" \"cd client && npm run dev\""
+    "start": "node server/server.js",
+    "install-server": "npm install --prefix server",       
+    "install-client": "npm install --prefix client",      
+    "build-client": "npm run build --prefix client",     
+    "postinstall": "npm run install-server && npm run install-client && npm run build-client" 
   },
   "repository": {
     "type": "git",

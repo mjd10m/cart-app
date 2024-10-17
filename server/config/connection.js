@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 mongoose.connect(
-  process.env.MONGODB_URI || 'mongodb://localhost/cart-app',
+  process.env.MONGODB_URI,
 );
 
 async function resetDatabase() {
