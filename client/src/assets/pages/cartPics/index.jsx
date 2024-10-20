@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import {Container, Row, Col, Button, Form, Spinner } from 'react-bootstrap';
-import Logo from '../../components/logo'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
 import {ADD_CUSTOMER, UPLOAD_FILE} from '../../../utils/mutations'
@@ -59,40 +58,37 @@ function CustomerPics({formData, totalPrice }) {
         e.preventDefault()
         setIsLoading(true)
         let fileArray = []
-        await Promise.all(
-            Object.entries(uploadFiles).map(([key,value]) => {
-                if(value !== null) {
-                    if (key === "receipt") {
-                        for (let i = 0; i < value.length; i++) {
-                            console.log(value)
-                            console.log(value[i])
-                            const renamedFile = renameFile(value[i], formData.transactionId + key + i)
-                            fileArray.push(renamedFile)  
-                        }
-                    } else {
-                        const renamedFile = renameFile(value, formData.transactionId + key)
-                        fileArray.push(renamedFile)
+        for (const [key, value] of Object.entries(uploadFiles)) {
+            if (value !== null) {
+                if (key === "receipt") {
+                    for (let i = 0; i < value.length; i++) {
+                        const renamedFile = renameFile(value[i], formData.transactionId + key + i);
+                        fileArray.push(renamedFile);
+                        
+                        // Await the uploadFile to ensure it's finished before continuing
+                        await uploadFile({
+                            variables: { files: [renamedFile], transactionId: formData.transactionId }
+                        });
                     }
+                } else {
+                    const renamedFile = renameFile(value, formData.transactionId + key);
+                    fileArray.push(renamedFile);
                     
+                    // Await the uploadFile to ensure it's finished before continuing
+                    await uploadFile({
+                        variables: { files: [renamedFile], transactionId: formData.transactionId }
+                    });
                 }
-            })
-        )
+            }
+        }
         console.log(fileArray)
         console.log(formData.transactionId)
-        try {
-            const upload = await uploadFile({
-                variables: {files: fileArray, transactionId: formData.transactionId}
-            })
-            console.log(upload)
-        } catch (error) {
-            const errorMessage = error.message
-            console.log(errorMessage)
-        }
         try {
             const {data} = await addCustomer({
                 variables: {...formData},
             })
             console.log(data)
+            setIsLoading(false)
             navigate('/summary')
         } catch (error) {
             const errorMessage = error.message
@@ -151,7 +147,7 @@ function CustomerPics({formData, totalPrice }) {
                     </Form.Group>
                     <Form.Group as={Col} xs ={6} controlId="invoice">
                     <Form.Label>Invoice/Bill of Sale</Form.Label>
-                    <Form.Control type="file" name="vinPlate" onChange={handleFileChange}/>
+                    <Form.Control type="file" name="invoice" onChange={handleFileChange}/>
                     </Form.Group>
                 </Row>
                 <Row className='mb-3'>

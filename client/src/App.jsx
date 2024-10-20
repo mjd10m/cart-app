@@ -15,7 +15,7 @@ function App() {
   const [formData, setFormData] = useState(defaultState)
   const [totalPrice, setTotalPrice] = useState('828.35')
   const httpLink = createUploadLink({
-    uri: 'http://localhost:3001/graphql',
+    uri: 'https://tag-my-cart-app.ue.r.appspot.com/graphql',
   });
   const client = new ApolloClient({
     link: httpLink,
