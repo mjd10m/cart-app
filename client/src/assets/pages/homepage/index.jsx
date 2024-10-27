@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function Homepage() {
   const navigate = useNavigate()
   const handleButtonClick = () => {
-    navigate('/contact')
+    navigate('/customerInfo')
   }
   return (
     <Container>
@@ -39,14 +39,14 @@ function Homepage() {
             <li>Picture of Drivers License</li>
             <li>Invoice or bill of sale from where cart was purchased</li>
             <li>Receipts for all parts purchased for DOT</li>
-            {/*<li><a href='#'>Click Here</a> for example pictures</li>*/}
-            {/*<li><a href='#'>Click Here</a> for sample invoice/bill of sale</li>*/}
+            <li><a href='#'>Click Here</a> for example pictures</li>
+            <li><a href='#'>Click Here</a> for sample invoice/bill of sale</li>
           </ul>
         </Col>
       </Row>
       <Row className="justify-content-center">
         <Col xs="3" className="text-center">
-          <Button className='button' onClick={handleButtonClick}>Contact Us</Button>
+          <Button className='button' onClick={handleButtonClick}>Get Started</Button>
         </Col>
       </Row>
     </Container>
