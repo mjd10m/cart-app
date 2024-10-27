@@ -39,8 +39,8 @@ function Homepage() {
             <li>Picture of Drivers License</li>
             <li>Invoice or bill of sale from where cart was purchased</li>
             <li>Receipts for all parts purchased for DOT</li>
-            <li><a href='#'>Click Here</a> for example pictures</li>
-            <li><a href='#'>Click Here</a> for sample invoice/bill of sale</li>
+            {/* <li><a href='#'>Click Here</a> for example pictures</li>
+            <li><a href='#'>Click Here</a> for sample invoice/bill of sale</li> */}
           </ul>
         </Col>
       </Row>

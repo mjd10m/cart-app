@@ -19,8 +19,7 @@ function CustomerPics({formData, totalPrice }) {
         receipt: []
     })
     const [isLoading, setIsLoading] = useState(false)
-    console.log(formData)
-    console.log(uploadFiles)
+
     function renameFile(file, newFileName) {
         return new File([file], newFileName, {
             type: file.type,
@@ -31,8 +30,7 @@ function CustomerPics({formData, totalPrice }) {
     const [uploadFile] = useMutation(UPLOAD_FILE)
     const handleFileChange = (e) => {
         const {name, files} = e.target
-        console.log(name)
-        console.log(files.length)
+        
         if(name === "receipt") {
             let receiptFileArray = []
             Array.from(files).forEach(file => {
@@ -50,8 +48,6 @@ function CustomerPics({formData, totalPrice }) {
                 [name]: files[0]
             }))
         }
-        console.log(files[0].name)
-        console.log(uploadFiles)
     }
     const navigate = useNavigate()
     async function handleSubmit(e) {
