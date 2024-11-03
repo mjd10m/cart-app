@@ -30,13 +30,8 @@ function Homepage() {
             <li>Seatbelt for eachseat</li>
           </ul>
         </Col>
-<<<<<<< HEAD
         <Col xs="5">
           <h5>What documents do I need to start the process?</h5>
-=======
-        <Col xs="11" md ="5">
-          <h5>What does my cart need to be legal?</h5>
->>>>>>> develop
           <ul>
             <li>Pictures of cart (All 4Corners)</li>
             <li>Picture of DOT stamp on windshield</li>
