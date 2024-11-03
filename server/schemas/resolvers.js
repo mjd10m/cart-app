@@ -1,6 +1,7 @@
 const { Customer, File } = require('../models/index');
 const bucket = require('../config/gcloud')
 const {GraphQLUpload} = require("graphql-upload")
+const sendMail = require("../config/gmail")
 
 
 const resolvers = {
@@ -22,6 +23,7 @@ const resolvers = {
             try {
                 const customer = await Customer.create({ ...args });
                 console.log(customer);
+                sendMail(customer)
                 return customer;
             } catch (error) {
                 console.error('Error creating customer:', error);
