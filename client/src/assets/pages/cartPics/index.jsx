@@ -19,9 +19,6 @@ function CustomerPics({formData, totalPrice }) {
         receipt: []
     })
     const [isLoading, setIsLoading] = useState(false)
-<<<<<<< HEAD
-
-=======
     const [fileUploadStatus, setFileUploadStatus] = useState(
         {
             fileCount: 1,
@@ -31,7 +28,6 @@ function CustomerPics({formData, totalPrice }) {
     )
     console.log(formData)
     console.log(uploadFiles)
->>>>>>> develop
     function renameFile(file, newFileName) {
         return new File([file], newFileName, {
             type: file.type,
