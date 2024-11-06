@@ -10,12 +10,14 @@ import Contact from './assets/pages/contact'
 import Summary from './assets/pages/summary/index.jsx'
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink} from '@apollo/client';
 import {createUploadLink} from 'apollo-upload-client'
+import AdminPage from './assets/pages/admin/index.jsx'
 
 function App() {
   const [formData, setFormData] = useState(defaultState)
   const [totalPrice, setTotalPrice] = useState('828.35')
   const httpLink = createUploadLink({
-    uri: 'https://tag-my-cart-app.ue.r.appspot.com/graphql',
+    //uri: 'https://tag-my-cart-app.ue.r.appspot.com/graphql',
+    uri: 'http://localhost:3001/graphql'
   });
   const client = new ApolloClient({
     link: httpLink,
@@ -30,6 +32,7 @@ function App() {
           <Route path="/customerInfo" element = {<CustomerInfo formData ={formData} setFormData = {setFormData} totalPrice = {totalPrice} setTotalPrice = {setTotalPrice}/>} />
           <Route path="/customerPics" element = {<CustomerPics formData ={formData} totalPrice = {totalPrice}/>} />
           <Route path='/summary' element={<Summary formData={formData}/>}/>
+          <Route path='/admin' element={<AdminPage/>}></Route>
         </Routes>
       </ApolloProvider>
     </div>

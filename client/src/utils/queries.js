@@ -21,6 +21,14 @@ export const QUERY_CUSTOMERS = gql`
             plateNum
             plateType
             createdAt
+            files {
+                url
+                filename
+                createdAt
+                encoding
+                mimetype
+                transactionId
+            }
         }
     }
 `

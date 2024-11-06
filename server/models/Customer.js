@@ -87,6 +87,15 @@ const customerSchema = new Schema(
     }
 );
 
+customerSchema.virtual('files', {
+    ref: 'File',              
+    localField: 'transactionId', 
+    foreignField: 'transactionId' 
+});
+
+customerSchema.set("toObject", { virtuals: true });
+customerSchema.set("toJSON", { virtuals: true });
+
 const Customer = model('Customer', customerSchema)
 
 module.exports = Customer

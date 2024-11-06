@@ -22,6 +22,7 @@ const typeDefs = gql`
         plateNum: String
         plateType: String
         createdAt: Date!
+        files: [File]
     }
     type File {
         filename: String!

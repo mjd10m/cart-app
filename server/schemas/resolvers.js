@@ -11,11 +11,17 @@ const resolvers = {
         listCustomers: async () => {
             return Customer.find()
             .select('-__v')
+            .populate('files')
         },
         listFiles: async() => {
             return File.find()
             .select('-__v')
-        }
+        },
+        // findCustomer: async () => {
+        //     return Customer.findOne()
+        //     .select('-__v')
+        //     .populate('files')
+        // }
     },
     Mutation: {
         addCustomer: async (parent, args) => {
