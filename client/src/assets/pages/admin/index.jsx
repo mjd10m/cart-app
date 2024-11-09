@@ -1,15 +1,58 @@
 import React, { useEffect, useState } from 'react'
 import {Container, Row, Col, Button, Form, Spinner, Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
 import {QUERY_CUSTOMERS} from '../../../utils/queries'
+import {GET_SIGNED_URLS} from '../../../utils/mutations'
 import Topbar from '../../components/topbar';
 import TableRecord from '../../components/table-record'
 
 function AdminPage() {
 
     const {loading, error, data} = useQuery(QUERY_CUSTOMERS)
+    const [getSignedUrl, { data: urlData, loading: urlLoading, error: urlError }] = useMutation(GET_SIGNED_URLS);
     
+    async function downloadFile(signedUrl, fileName) {
+        try {
+            const response = await fetch(signedUrl);
+            if (!response.ok) throw new Error("Failed to fetch file");
+    
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+    
+            // Create a download link
+            const link = document.createElement("a");
+            link.href = blobUrl;
+            link.download = fileName;  // Set the download file name to the original name
+            document.body.appendChild(link); // Append link to the body (required for clicking)
+    
+            // Trigger the download by clicking the link
+            link.click();
+    
+            // Clean up after download
+            window.URL.revokeObjectURL(blobUrl);  // Free up memory by revoking the object URL
+            document.body.removeChild(link); // Remove link from the DOM
+        } catch (error) {
+            console.error("Error downloading file:", error);
+        }
+    }
+
+    async function handleDownload(e){
+        e.preventDefault()
+        const fileGroupId = e.target.id
+        const fileNames = customers[fileGroupId].files.map(file => file.filename)
+        console.log(fileNames)
+        try {
+            const {data} = await getSignedUrl({
+              variables: { fileName: fileNames },
+            });
+            console.log("Signed URLs:", data);
+            data.getSignedUrls.map((signedUrl, index) => downloadFile(signedUrl,fileNames[index]))
+
+          } catch (err) {
+            console.error("Error fetching signed URL:", err);
+          }
+    }
     if(!loading) {
         console.log(data.listCustomers)
     }
@@ -48,7 +91,7 @@ function AdminPage() {
             </thead>
             <tbody>
                 {customers.map((person, index) => (
-                    <TableRecord key={index} customerData = {person}/>
+                    <TableRecord key={index} customerData = {person} handleClick = {handleDownload} index={index}/>
                 ))}
             </tbody>
             </Table>

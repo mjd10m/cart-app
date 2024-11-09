@@ -10,6 +10,7 @@ const resolvers = {
     Query: {
         listCustomers: async () => {
             return Customer.find()
+            .sort({createdAt: -1})
             .select('-__v')
             .populate('files')
         },
@@ -35,6 +36,22 @@ const resolvers = {
                 console.error('Error creating customer:', error);
                 throw new Error('Failed to create customer');
             }
+        },
+        getSignedUrls: async (parent,{fileName}) => {
+            console.log("In Server")
+            const expires = Date.now() + 120000;
+            const signedUrls = await Promise.all(
+                fileName.map(async(file) => {
+                    const [url] = await bucket
+                        .file(file)
+                        .getSignedUrl({
+                            action: 'read',
+                            expires,
+                        })
+                    return url
+                })
+            )
+            return signedUrls
         },
         uploadFiles: async (parent,{files, transactionId}) => {
             console.log(transactionId)            

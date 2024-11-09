@@ -2,7 +2,7 @@ import React from 'react'
 import TableField from '../table-field'
 import {Container, Row, Col, Button, Form, Spinner, Table } from 'react-bootstrap';
 
-function TableRecord({customerData}) {
+function TableRecord({customerData, handleClick, index}) {
   return (
     <>
         <tr>
@@ -23,7 +23,7 @@ function TableRecord({customerData}) {
             <TableField customerData={customerData} id='plateNum'/>
             <TableField customerData={customerData} id='plateType'/>
             <td style={{ background: 'none', border: 'none', padding: '0', margin: '0' }}>
-                <Button>Download</Button>
+                <Button id={index} onClick={handleClick}>Download</Button>
             </td>
         </tr>
     </>

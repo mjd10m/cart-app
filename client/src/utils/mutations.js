@@ -18,3 +18,8 @@ export const UPLOAD_FILE = gql `
         }
     }
 `
+export const GET_SIGNED_URLS = gql `
+    mutation Mutation($fileName: [String!]!) {
+        getSignedUrls(fileName: $fileName)
+}
+`
