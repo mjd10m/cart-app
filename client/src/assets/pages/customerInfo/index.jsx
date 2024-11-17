@@ -60,16 +60,7 @@ function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
     useEffect(() => {
         console.log('formData updated:', formData);
     }, [formData]);
-    const passengerOptions = () => {
-        let options =[]
-        for(let i = 2; i = 10; i++){
-            options.push(<option key={i} value={i}>{i}</option>)
-        } 
-    }
-    // const handleChange = (e) => {
-    //     const {name, value} = e.target
-    //     setFormData({...formData,[name]: value})
-    // }
+    
     return(
         <Container fluid style={{ padding: 0, margin: 0 }}>
             <Topbar totalPrice = {totalPrice}/>

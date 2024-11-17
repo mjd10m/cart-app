@@ -23,3 +23,23 @@ export const GET_SIGNED_URLS = gql `
         getSignedUrls(fileName: $fileName)
 }
 `
+export const ADD_USER = gql `
+    mutation AddUser($username: String!, $password: String!, $adminPassword: String!) {
+        addUser(username: $username, password: $password, adminPassword: $adminPassword) {
+            token
+            user {
+                username
+            }
+        }
+    }
+`
+export const LOGIN = gql `
+    mutation Login($username: String!, $password: String!) {
+        login(username: $username, password: $password) {
+            token
+            user {
+                username
+            }
+        }
+    }
+`

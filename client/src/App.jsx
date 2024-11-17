@@ -11,6 +11,7 @@ import Summary from './assets/pages/summary/index.jsx'
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink} from '@apollo/client';
 import {createUploadLink} from 'apollo-upload-client'
 import AdminPage from './assets/pages/admin/index.jsx'
+import Login from './assets/pages/login/index.jsx'
 
 function App() {
   const [formData, setFormData] = useState(defaultState)
@@ -33,6 +34,7 @@ function App() {
           <Route path="/customerPics" element = {<CustomerPics formData ={formData} totalPrice = {totalPrice}/>} />
           <Route path='/summary' element={<Summary formData={formData}/>}/>
           <Route path='/admin' element={<AdminPage/>}></Route>
+          <Route path='/login' element={<Login/>}></Route>
         </Routes>
       </ApolloProvider>
     </div>

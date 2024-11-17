@@ -1,7 +1,9 @@
-const { Customer, File } = require('../models/index');
+const { Customer, File, User } = require('../models/index');
 const bucket = require('../config/gcloud')
 const {GraphQLUpload} = require("graphql-upload")
 const sendMail = require("../config/gmail")
+const { signToken } = require('../utils/auth');
+const { AuthenticationError } = require('apollo-server-express');
 
 
 const resolvers = {
@@ -36,6 +38,28 @@ const resolvers = {
                 console.error('Error creating customer:', error);
                 throw new Error('Failed to create customer');
             }
+        },
+        addUser: async (parent, args) => {
+            const adminUser = await User.findOne({username: "admin"});
+            const correctPw = await adminUser.isCorrectPassword(args.adminPassword);
+            if (!correctPw) {
+                throw new AuthenticationError('incorrect credentials');
+            }
+            const user = await User.create({username: args.username, password: args.password});
+            const token = signToken(user);
+            return { token, user };
+        },
+        login: async (parent, { username, password }) => {
+        const user = await User.findOne({ username });
+        if (!user) {
+            throw new AuthenticationError('incorrect credentials');
+        }
+        const correctPw = await user.isCorrectPassword(password);
+        if (!correctPw) {
+            throw new AuthenticationError('incorrect credentials');
+        }
+        const token = signToken(user);
+        return { token, user };
         },
         getSignedUrls: async (parent,{fileName}) => {
             console.log("In Server")

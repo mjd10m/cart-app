@@ -1,5 +1,6 @@
 const { Schema, model, SchemaTypes } = require('mongoose');
 
+
 const customerSchema = new Schema(
     {
         transactionId: {
