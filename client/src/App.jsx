@@ -1,7 +1,7 @@
 import Homepage from './assets/pages/homepage'
 import CustomerInfo from './assets/pages/customerInfo'
 import CustomerPics from './assets/pages/cartPics'
-import {Routes, Route} from 'react-router-dom'
+import {Routes, Route, Navigate} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import defaultState from './state/defaultState.js'
@@ -12,6 +12,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink} from '@apo
 import {createUploadLink} from 'apollo-upload-client'
 import AdminPage from './assets/pages/admin/index.jsx'
 import Login from './assets/pages/login/index.jsx'
+import Auth from './utils/auth.js'
 
 function App() {
   const [formData, setFormData] = useState(defaultState)
@@ -33,8 +34,8 @@ function App() {
           <Route path="/customerInfo" element = {<CustomerInfo formData ={formData} setFormData = {setFormData} totalPrice = {totalPrice} setTotalPrice = {setTotalPrice}/>} />
           <Route path="/customerPics" element = {<CustomerPics formData ={formData} totalPrice = {totalPrice}/>} />
           <Route path='/summary' element={<Summary formData={formData}/>}/>
-          <Route path='/admin' element={<AdminPage/>}></Route>
-          <Route path='/login' element={<Login/>}></Route>
+          <Route path='/admin' element={Auth.loggedIn() ?(<AdminPage/>):(<Navigate to="/login" />)}></Route>
+          <Route path='/adminlogin' element={<Login/>}></Route>
         </Routes>
       </ApolloProvider>
     </div>

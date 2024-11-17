@@ -1,12 +1,17 @@
 import React, {useState} from 'react'
 import {Container, Form, Row, Col, Card, Tab, Tabs, Button} from 'react-bootstrap'
+import { useMutation } from '@apollo/client'
 import Logo from '../../components/logo'
 import * as yup from 'yup'
 import * as formik from 'formik'
+import {ADD_USER, LOGIN} from '../../../utils/mutations'
+import Auth from '../../../utils/auth'
 
 function Login() {
     const state = 'signIn'
-    const [selectedTab, setSelectedTab] = useState('signup')
+    const [selectedTab, setSelectedTab] = useState('login')
+    const [addUser] = useMutation(ADD_USER)
+    const [login] = useMutation(LOGIN)
     const {Formik} = formik 
     const validationSchema = (selectedTab) => {
         return yup.object().shape({
@@ -28,7 +33,26 @@ function Login() {
     }
     const handleSubmit = async (values) => {
         console.log('Form Submitted', values);
-        
+        if(selectedTab === 'signup'){
+            const { data } = await addUser({
+                variables: {
+                    username: values.username,
+                    password: values.password,
+                    adminPassword: values.adminPassword
+                }
+            });
+            Auth.login(data.addUser.token)
+            window.location.assign('/admin')
+        } else {
+            const { data } = await login({
+                variables: {
+                    username: values.username,
+                    password: values.password
+                }
+            });
+            Auth.login(data.login.token)
+            window.location.assign('/admin')
+        }
       };
     const handleTabSelect = (key) => {
         setSelectedTab(key)
