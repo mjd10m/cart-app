@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import {Container, Row, Col, Button, Form, Spinner, Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/client'
@@ -11,7 +11,8 @@ function AdminPage() {
 
     const {loading, error, data} = useQuery(QUERY_CUSTOMERS)
     const [getSignedUrl, { data: urlData, loading: urlLoading, error: urlError }] = useMutation(GET_SIGNED_URLS);
-    
+    const signupEmail = useRef()
+
     async function downloadFile(signedUrl, fileName) {
         try {
             const response = await fetch(signedUrl);
@@ -56,6 +57,10 @@ function AdminPage() {
     if(!loading) {
         console.log(data.listCustomers)
     }
+    function handleSignupEmail(e){
+        e.preventDefault()
+        console.log(signupEmail.current.value)
+    }
     const [customers, setCustomers] = useState([])
     useEffect(()=> {
         if(!loading && data?.listCustomers) {
@@ -68,7 +73,7 @@ function AdminPage() {
 
     return(
         <Container>
-            <Table striped bordered hover responsive>
+            <Table className='mb-3' striped bordered hover responsive>
             <thead>
                 <tr>
                     <th>Transaction ID</th>
@@ -95,6 +100,16 @@ function AdminPage() {
                 ))}
             </tbody>
             </Table>
+            <Row className="justify-content-center align-items-center">
+                <Form noValidate onSubmit={handleSignupEmail} className="d-flex flex-column align-items-center w-100">
+                    <Form.Group as={Col} xs={12} md={4} controlId="signupEmail" className="text-center mb-3" >
+                        <Form.Label>Invite User</Form.Label>
+                        <Form.Control type="text" name="signupEmail" ref = {signupEmail} />
+                    </Form.Group>
+                    <Button type='submit'>Send Link</Button>
+                </Form>
+            </Row>
+            
         </Container>
     )
 }

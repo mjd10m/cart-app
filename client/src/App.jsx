@@ -34,7 +34,7 @@ function App() {
           <Route path="/customerInfo" element = {<CustomerInfo formData ={formData} setFormData = {setFormData} totalPrice = {totalPrice} setTotalPrice = {setTotalPrice}/>} />
           <Route path="/customerPics" element = {<CustomerPics formData ={formData} totalPrice = {totalPrice}/>} />
           <Route path='/summary' element={<Summary formData={formData}/>}/>
-          <Route path='/admin' element={Auth.loggedIn() ?(<AdminPage/>):(<Navigate to="/login" />)}></Route>
+          <Route path='/admin' element={Auth.loggedIn() ?(<AdminPage/>):(<Navigate to="/adminlogin" />)}></Route>
           <Route path='/adminlogin' element={<Login/>}></Route>
         </Routes>
       </ApolloProvider>
