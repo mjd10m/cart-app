@@ -16,7 +16,7 @@ Bot Mike`
         const email = {
             userId: "me",
             requestBody: {
-            raw: createEmailBody("info@tagmycart.com","info@tagmycart.com","New TagMyCart Customer", body),
+            raw: createEmailBody("doughertym727@gmail.com","mjd10m@outlook.com","New TagMyCart Customer", body),
             },
          };
   
@@ -25,12 +25,39 @@ Bot Mike`
     } catch (error) {
         console.error("Error sending email:", error);
     }
-  }
+}
   
   // Helper function to create email body (base64 encoded for Gmail API)
   function createEmailBody(from, to, subject, body) {
     const message = `From: ${from.trim()}\r\nTo: ${to.trim()}\r\nSubject: ${subject}\r\nContent-Type: text/plain; charset="UTF-8"\r\n\r\n${body}`;
     return Buffer.from(message).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-  }
+}
 
-  module.exports = sendEmail
+async function sendSignupEmail(userEmail, url) {
+    try {
+        const gmail = google.gmail({ version: "v1", auth: oAuth2Client });
+        const body = `
+Hi New User
+    
+    You have been granted access to the Tag My Cart admin app.
+    Click the link below to access your page:
+    ${url}
+    
+Bot Mike`
+        const email = {
+            userId: "me",
+            requestBody: {
+            raw: createEmailBody("doughertym727@gmail.com",userEmail,"Tag My Cart Signup Link", body),
+            },
+         };
+  
+        const response = await gmail.users.messages.send(email);
+        console.log("Email sent successfully:", response.data);
+    } catch (error) {
+        console.error("Error sending email:", error);
+    }
+}
+
+
+
+  module.exports = {sendEmail, sendSignupEmail}

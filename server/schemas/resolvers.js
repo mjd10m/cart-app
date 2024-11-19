@@ -1,8 +1,8 @@
 const { Customer, File, User } = require('../models/index');
 const bucket = require('../config/gcloud')
 const {GraphQLUpload} = require("graphql-upload")
-const sendMail = require("../config/gmail")
-const { signToken } = require('../utils/auth');
+const { sendEmail, sendSignupEmail } = require("../config/gmail")
+const { signToken, signupToken } = require('../utils/auth');
 const { AuthenticationError } = require('apollo-server-express');
 
 
@@ -32,12 +32,18 @@ const resolvers = {
             try {
                 const customer = await Customer.create({ ...args });
                 console.log(customer);
-                sendMail(customer)
+                sendEmail(customer)
                 return customer;
             } catch (error) {
                 console.error('Error creating customer:', error);
                 throw new Error('Failed to create customer');
             }
+        },
+        signup: async (parent, {email}) => {
+            const token = signupToken(email)
+            const url = `https://tagmycart.com/signup?token=${token}`
+            sendSignupEmail(email, url)
+            return url
         },
         addUser: async (parent, args) => {
             const adminUser = await User.findOne({username: "admin"});

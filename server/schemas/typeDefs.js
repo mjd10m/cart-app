@@ -50,6 +50,7 @@ const typeDefs = gql`
         getSignedUrls(fileName: [String!]!): [String!]!
         addUser(username: String!, password: String!, adminPassword: String!): Auth
         login(username: String!, password: String!): Auth
+        signup(email: String!): String!
     }
 `;
 
