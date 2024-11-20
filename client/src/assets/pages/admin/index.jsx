@@ -3,7 +3,7 @@ import {Container, Row, Col, Button, Form, Spinner, Table } from 'react-bootstra
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/client'
 import {QUERY_CUSTOMERS} from '../../../utils/queries'
-import {GET_SIGNED_URLS} from '../../../utils/mutations'
+import {GET_SIGNED_URLS, SIGNUP} from '../../../utils/mutations'
 import Topbar from '../../components/topbar';
 import TableRecord from '../../components/table-record'
 
@@ -11,6 +11,7 @@ function AdminPage() {
 
     const {loading, error, data} = useQuery(QUERY_CUSTOMERS)
     const [getSignedUrl, { data: urlData, loading: urlLoading, error: urlError }] = useMutation(GET_SIGNED_URLS);
+    const [sendSignUpEmail, {data: signupData, loading: signupLoading, error: signupError}] = useMutation(SIGNUP)
     const signupEmail = useRef()
 
     async function downloadFile(signedUrl, fileName) {
@@ -57,9 +58,16 @@ function AdminPage() {
     if(!loading) {
         console.log(data.listCustomers)
     }
-    function handleSignupEmail(e){
+    async function handleSignupEmail(e){
         e.preventDefault()
         console.log(signupEmail.current.value)
+        try {
+            await sendSignUpEmail({
+                variables: {email: signupEmail.current.value}})
+        } catch (error) {
+            console.log(error)
+        }
+       
     }
     const [customers, setCustomers] = useState([])
     useEffect(()=> {

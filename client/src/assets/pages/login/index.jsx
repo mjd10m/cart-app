@@ -20,16 +20,12 @@ function Login() {
             confirmPassword: selectedTab === 'signup'
                 ? yup.string().required('Please enter the password again').oneOf([yup.ref('password'), null], "Passwords didn't match")
                 : yup.string().notRequired(),
-            adminPassword: selectedTab === 'signup'
-                  ? yup.string().required('Required')
-                  : yup.string().notRequired(),
         })
     }
     const initialValues = {
         username: '',
         password: '',
-        confirmPassword: '',
-        adminPassword: ''
+        confirmPassword: ''
     }
     const handleSubmit = async (values) => {
         console.log('Form Submitted', values);
@@ -38,7 +34,6 @@ function Login() {
                 variables: {
                     username: values.username,
                     password: values.password,
-                    adminPassword: values.adminPassword
                 }
             });
             Auth.login(data.addUser.token)
@@ -72,7 +67,6 @@ function Login() {
                         justify
                         >
                         <Tab eventKey="login" title="Login" />
-                        <Tab eventKey="signup" title="Signup" />
                         </Tabs>
                     </Card.Header>
                     <Card.Body>
@@ -101,13 +95,6 @@ function Login() {
                                 <Form.Control type="password" name="confirmPassword" value = {values.confirmPassword} onChange={handleChange} isInvalid={touched.confirmPassword && !!errors.confirmPassword}/>
                                 <Form.Control.Feedback type='invalid'>{errors.confirmPassword}</Form.Control.Feedback>
                             </Col>   
-                            </Form.Group>
-                            <Form.Group as={Row} className='mb-3' controlId="adminPassword">
-                            <Form.Label column xs={5} >Admin Password</Form.Label>
-                            <Col>
-                                <Form.Control type="password" name="adminPassword" value = {values.adminPassword} onChange={handleChange} isInvalid={touched.adminPassword && !!errors.adminPassword}/>
-                                <Form.Control.Feedback type='invalid'>{errors.adminPassword}</Form.Control.Feedback>
-                            </Col>
                             </Form.Group>
                             </>   
                         ):(<div/>)}

@@ -2,7 +2,7 @@ const { Customer, File, User } = require('../models/index');
 const bucket = require('../config/gcloud')
 const {GraphQLUpload} = require("graphql-upload")
 const { sendEmail, sendSignupEmail } = require("../config/gmail")
-const { signToken, signupToken } = require('../utils/auth');
+const { signToken, signupToken, checkSignupToken } = require('../utils/auth');
 const { AuthenticationError } = require('apollo-server-express');
 
 
@@ -25,6 +25,9 @@ const resolvers = {
         //     .select('-__v')
         //     .populate('files')
         // }
+        validateSignupToken: (parent, {token}) => {
+            return checkSignupToken(token)
+        }
     },
     Mutation: {
         addCustomer: async (parent, args) => {
@@ -41,16 +44,11 @@ const resolvers = {
         },
         signup: async (parent, {email}) => {
             const token = signupToken(email)
-            const url = `https://tagmycart.com/signup?token=${token}`
+            const url = `http://localhost:5173/signup?token=${token}`
             sendSignupEmail(email, url)
             return url
         },
         addUser: async (parent, args) => {
-            const adminUser = await User.findOne({username: "admin"});
-            const correctPw = await adminUser.isCorrectPassword(args.adminPassword);
-            if (!correctPw) {
-                throw new AuthenticationError('incorrect credentials');
-            }
             const user = await User.create({username: args.username, password: args.password});
             const token = signToken(user);
             return { token, user };

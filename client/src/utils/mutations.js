@@ -24,8 +24,8 @@ export const GET_SIGNED_URLS = gql `
 }
 `
 export const ADD_USER = gql `
-    mutation AddUser($username: String!, $password: String!, $adminPassword: String!) {
-        addUser(username: $username, password: $password, adminPassword: $adminPassword) {
+    mutation AddUser($username: String!, $password: String!) {
+        addUser(username: $username, password: $password) {
             token
             user {
                 username
@@ -41,5 +41,10 @@ export const LOGIN = gql `
                 username
             }
         }
+    }
+`
+export const SIGNUP = gql `
+    mutation Mutation($email: String!) {
+        signup(email: $email)
     }
 `

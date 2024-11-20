@@ -43,3 +43,8 @@ export const QUERY_FILES = gql `
         }
     }
 `
+export const VALIDATE_SIGNUP_TOKEN = gql `
+    query validateSignupToken($token: String!) {
+        validateSignupToken(token: $token)
+    }
+`

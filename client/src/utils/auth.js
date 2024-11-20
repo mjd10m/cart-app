@@ -1,5 +1,6 @@
 import { jwtDecode } from 'jwt-decode';
 
+
 class AuthService {
   getProfile() {
     return jwtDecode(this.getToken());
@@ -38,6 +39,15 @@ class AuthService {
     localStorage.removeItem('id_token');
     // this will reload the page and reset the state of the application
     window.location.assign('/');
+  }
+  getSignupToken() {
+    const urlParams = new URLSearchParams(window.location.search)
+    const token = urlParams.get('token')
+    if (token) {
+      return token
+    } else {
+      return '1234'
+    }
   }
 }
 

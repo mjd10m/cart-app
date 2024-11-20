@@ -12,6 +12,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink} from '@apo
 import {createUploadLink} from 'apollo-upload-client'
 import AdminPage from './assets/pages/admin/index.jsx'
 import Login from './assets/pages/login/index.jsx'
+import Signup from './assets/pages/signup/index.jsx'
 import Auth from './utils/auth.js'
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route path='/summary' element={<Summary formData={formData}/>}/>
           <Route path='/admin' element={Auth.loggedIn() ?(<AdminPage/>):(<Navigate to="/adminlogin" />)}></Route>
           <Route path='/adminlogin' element={<Login/>}></Route>
+          <Route path='/signup' element={<Signup/>}></Route>
         </Routes>
       </ApolloProvider>
     </div>
