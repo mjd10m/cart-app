@@ -44,7 +44,7 @@ const resolvers = {
         },
         signup: async (parent, {email}) => {
             const token = signupToken(email)
-            const url = `http://localhost:5173/signup?token=${token}`
+            const url = `https://tagmycart.com/signup?token=${token}`
             sendSignupEmail(email, url)
             return url
         },
