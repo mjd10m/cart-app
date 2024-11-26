@@ -186,7 +186,7 @@ function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
 
                 {values.plate === "plateTransfer" ?(
                     <Row className="mb-3 justify-content-center">
-                        <Form.Group as={Col} md={4} xs={12} controlId="plateNum" className=''>
+                        <Form.Group as={Col} md={4} xs={12} controlId="plateNum">
                             <Form.Label>Plate Number</Form.Label>
                             <Form.Control type="text" name="plateNum" value = {values.plateNum} onChange={handleChange} isInvalid={touched.plateNum && !!errors.plateNum} />
                             <Form.Control.Feedback type='invalid'>{errors.plateNum}</Form.Control.Feedback>

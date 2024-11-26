@@ -6,7 +6,7 @@ function TableField({customerData, id}) {
     return dateObj.toLocaleDateString('en-us',{year:"numeric", month:"numeric", day:"numeric"})
   }
   return (
-    <td id={id}>{id === "dob"? convertDate(customerData[id]):customerData[id]}</td>
+    <td id={id}>{id === "dob" || id === "createdAt" ? convertDate(customerData[id]):customerData[id]}</td>
   )
 }
 

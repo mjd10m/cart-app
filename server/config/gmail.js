@@ -16,7 +16,7 @@ Bot Mike`
         const email = {
             userId: "me",
             requestBody: {
-            raw: createEmailBody("doughertym727@gmail.com","mjd10m@outlook.com","New TagMyCart Customer", body),
+            raw: createEmailBody("doughertym727@gmail.com","info@tagmycart.com","New TagMyCart Customer", body),
             },
          };
   
