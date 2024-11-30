@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react'
-import {Container, Form, Row, Col, Card, Tab, Tabs, Button} from 'react-bootstrap'
+import React, { useEffect } from 'react'
+import {Container, Form, Row, Col, Card, Button} from 'react-bootstrap'
 import { useMutation, useLazyQuery } from '@apollo/client'
 import Logo from '../../components/logo'
 import * as yup from 'yup'
 import * as formik from 'formik'
-import {ADD_USER, LOGIN} from '../../../utils/mutations'
+import { ADD_USER } from '../../../utils/mutations'
 import Auth from '../../../utils/auth'
 import { VALIDATE_SIGNUP_TOKEN } from '../../../utils/queries';
 

@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Container, Form, Row, Col, Card, Tab, Tabs, Button} from 'react-bootstrap'
+import {Container, Form, Row, Col, Card, Button} from 'react-bootstrap'
 import { useMutation } from '@apollo/client'
 import Logo from '../../components/logo'
 import * as yup from 'yup'
@@ -37,11 +37,7 @@ function Login() {
       console.log(e.message)
       setLoginError({message: e.message});
     }
-    
   };
-  const handleTabSelect = (key) => {
-    setSelectedTab(key)
-  }
   return (
     <Container>
       <Logo></Logo>
