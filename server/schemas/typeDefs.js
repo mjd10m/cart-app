@@ -21,6 +21,7 @@ const typeDefs = gql`
     plate: String!
     plateNum: String
     plateType: String
+    dealerName: String
     createdAt: Date!
     files: [File]
   }
@@ -46,7 +47,7 @@ const typeDefs = gql`
     validateSignupToken(token: String!): Boolean
   }
   type Mutation {
-    addCustomer(transactionId: String!, firstName: String!, lastName: String!, dob: Date!, addr1: String!, addr2: String, city: String!, state: String!, zip: String!, email: String!, phone: String!, cartSize: String!, cartColor: String!, plate: String!, plateNum: String, plateType: String): Customer
+    addCustomer(transactionId: String!, firstName: String!, lastName: String!, dob: Date!, addr1: String!, addr2: String, city: String!, state: String!, zip: String!, email: String!, phone: String!, cartSize: String!, cartColor: String!, plate: String!, plateNum: String, plateType: String, dealerName: String): Customer
     uploadFiles(files: [Upload!]!, transactionId: String!): [File!]!
     getSignedUrls(fileName: [String!]!): [String!]!
     addUser(username: String!, password: String!): Auth

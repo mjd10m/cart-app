@@ -1,12 +1,13 @@
 import React from 'react'
-import {Container, Row, Col, Button } from 'react-bootstrap';
+import {Container, Row, Col, Button, Navbar } from 'react-bootstrap';
 import Logo from '../../components/logo'
 import { useNavigate } from 'react-router-dom';
+
 
 function Homepage() {
   const navigate = useNavigate()
   const handleButtonClick = () => {
-    navigate('/customerInfo')
+    navigate('/intakeselection')
   }
   return (
     <Container>

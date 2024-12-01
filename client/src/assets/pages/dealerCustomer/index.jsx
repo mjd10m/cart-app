@@ -8,7 +8,7 @@ import {plateOptions, passengerOptions} from "../../../state/dropdownOptions"
 import { useNavigate } from 'react-router-dom'
 import IntakeFormGroup from '../../components/intake-form-group';
 
-function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
+function DealerCustomer({formData, setFormData, totalPrice, setTotalPrice }) {
   const {Formik} = formik
   const validationSchema = yup.object().shape({
     firstName: yup.string().required('Required'),
@@ -70,29 +70,20 @@ function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
       <Row className="mb-4 text-center">
         <Col xs={12}>
           <h2 className="mb-3">Please complete the form below</h2>
-          <p className="lead mb-2">
-            Looking for a specialty Florida plate for your cart?{' '}
-            <a href="https://www.flhsmv.gov/pdf/specialtyplates/tagbrochure.pdf" target="_blank" rel="noopener noreferrer">
-              Browse all available options here
-            </a>
-          </p>
-          <p className="lead mb-0">
-            Considering a customized Florida plate?{' '}
-            <a href="https://services.flhsmv.gov/MVCheckPersonalPlate/" target="_blank" rel="noopener noreferrer">
-                Check availability
-            </a>
-          </p>
         </Col>
       </Row>
       <Formik validationSchema={validationSchema} onSubmit={handleSubmit} initialValues={{...formData}}>
       {({handleSubmit, handleChange, values, touched, errors  }) => (
         <Form noValidate onSubmit={handleSubmit} className='p-3'>
+          <Row className="justify-content-center mb-3">
+            <IntakeFormGroup label={"Dealership Name"} type="text" xs={12} md={6} controlId="dealerName" name="dealerName" value={values.dealerName} onChange={handleChange} isInvalid={touched.dealerName && !!errors.dealerName} errorMessage={errors.dealerName}/>
+          </Row>
           <Row className="mb-3">
             <IntakeFormGroup label={"First Name"} type="text" xs={12} md={4} controlId="firstName" name="firstName" value={values.firstName} onChange={handleChange} isInvalid={touched.firstName && !!errors.firstName} errorMessage={errors.firstName}/>
             <IntakeFormGroup label={"Last Name"} type="text" xs={12} md={4} controlId="lastName" name="lastName" value={values.lastName} onChange={handleChange} isInvalid={touched.lastName && !!errors.lastName} errorMessage={errors.lastName}/>
             <IntakeFormGroup label={"Date of Birth"} type="date" xs={12} md={4} controlId="dob" name="dob" value={values.dob} onChange={handleChange} isInvalid={touched.dob && !!errors.dob} errorMessage={errors.dob}/>
           </Row>
-          <Row>
+          <Row className="mb-3">
             <IntakeFormGroup label={"Address Line 1"} type="text" xs={12} md={7} controlId="address1" name="addr1" value={values.addr1} onChange={handleChange} isInvalid={touched.addr1 && !!errors.addr1} errorMessage={errors.addr1}/>
             <IntakeFormGroup label={"Address Line 2"} type="text" xs={12} md={5} controlId="address2" name="addr2" value={values.addr2} onChange={handleChange} isInvalid={touched.addr1 && !!errors.addr1} errorMessage={errors.addr1}/>
           </Row>    
@@ -147,4 +138,4 @@ function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
   )
 }
 
-export default CustomerInfo
+export default DealerCustomer
