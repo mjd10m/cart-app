@@ -22,13 +22,13 @@ function FormSelection() {
       </Row>
       <Row className='text-center justify-content-center'>
         <Col xs={5}>
-          <Button id="individual" onClick={handleButtonClick} className='button p-4'>
+          <Button id="individual" style={{maxWidth:'300px',maxHeight:'160px'}} onClick={handleButtonClick} className='button p-4'>
             <div className= 'mb-3'>Individual</div>
             <div>You are submitting information for yourself</div>
           </Button>
         </Col>
         <Col xs={5}>
-          <Button id="dealer" onClick={handleButtonClick} className='button p-4'>
+          <Button id="dealer" style={{maxWidth:'300px',maxHeight:'160px'}} onClick={handleButtonClick} className='button p-4'>
             <div className= 'mb-3'>Dealer</div>
             <div>You are submitting information on behalf of a customer</div>
           </Button>
