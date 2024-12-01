@@ -20,6 +20,7 @@ function TableHeader() {
             <th>Plate Option</th>
             <th>Plate Type</th>
             <th>Plate Num</th>
+            <th>Dealership Name</th>
             <th>Submitted Date</th>
         </tr>
     </thead>
