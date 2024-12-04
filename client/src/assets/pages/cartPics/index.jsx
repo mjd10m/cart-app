@@ -120,7 +120,9 @@ function CustomerPics({formData, totalPrice }) {
           });
           setFileUploadStatus(prevState => ({
             ...prevState,
-            fileCount: prevState.fileCount + 1
+            fileCount: prevState.fileCount == prevState.totalCount 
+            ? prevState.fileCount
+            : prevState.fileCount + 1
           }));
         }   
       }
