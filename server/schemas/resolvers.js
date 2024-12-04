@@ -1,9 +1,11 @@
 const { Customer, File, User } = require('../models/index');
 const bucket = require('../config/gcloud')
 const {GraphQLUpload} = require("graphql-upload")
-const { sendEmail, sendSignupEmail } = require("../config/gmail")
+const { sendEmail, sendSignupEmail, sendSuccessEmail } = require("../config/gmail")
 const { signToken, signupToken, checkSignupToken } = require('../utils/auth');
 const { AuthenticationError } = require('apollo-server-express');
+const { createPoaPdf } = require('../utils/pdf');
+const fs = require('fs')
 
 
 const resolvers = {
@@ -35,7 +37,15 @@ const resolvers = {
       try {
         const customer = await Customer.create({ ...args });
         console.log(customer);
+        await createPoaPdf('./utils/pdfs/82053.pdf', `./utils/pdfs/temp/${customer.lastName}82053.pdf`,customer)
         sendEmail(customer)
+        await sendSuccessEmail(customer, `./utils/pdfs/temp/${customer.lastName}82053.pdf`)
+        try {
+          fs.unlinkSync(`./utils/pdfs/temp/${customer.lastName}82053.pdf`); // Replace with your file path
+          console.log('File deleted successfully');
+        } catch (err) {
+          console.error('Error deleting file:', err);
+        }
         return customer;
       } catch (error) {
         console.error('Error creating customer:', error);
