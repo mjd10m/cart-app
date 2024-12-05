@@ -22,7 +22,6 @@ function Login() {
     password: '',
   }
   const handleSubmit = async (values) => {
-    console.log('Form Submitted', values);
     setLoginError({message: ''});
     try {
       const { data } = await login({
