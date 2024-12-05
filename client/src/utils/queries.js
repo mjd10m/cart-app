@@ -20,6 +20,7 @@ export const QUERY_CUSTOMERS = gql`
             plate
             plateNum
             plateType
+            dealerName
             createdAt
             files {
                 url

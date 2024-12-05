@@ -22,6 +22,7 @@ function TableRecord({customerData, handleClick, index}) {
             <TableField customerData={customerData} id='plate'/>
             <TableField customerData={customerData} id='plateNum'/>
             <TableField customerData={customerData} id='plateType'/>
+            <TableField customerData={customerData} id='dealerName'/>
             <TableField customerData={customerData} id='createdAt'/>
             <td style={{ background: 'none', border: 'none', padding: '0', margin: '0' }}>
                 <Button id={index} onClick={handleClick}>Download</Button>

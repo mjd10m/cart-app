@@ -14,7 +14,8 @@ const defaultState = {
   cartColor: '',
   plate: '',
   plateNum:'',
-  plateType:''
+  plateType:'',
+  dealerName:''
   };
   
   export default defaultState;

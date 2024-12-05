@@ -7,6 +7,7 @@ const db = require('./config/connection');
 const cors = require('cors');
 const { graphqlUploadExpress } = require('graphql-upload');
 const { authMiddleware } = require('./utils/auth');
+const  {addTextToPdfServerSide} = require('./utils/pdf')
 
 
 const PORT = process.env.PORT || 3001;
@@ -23,20 +24,20 @@ app.use(express.json());
 app.use(graphqlUploadExpress({ maxFileSize: 1000000000, maxFiles: 15 }));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist','index.html'));
+  res.sendFile(path.join(__dirname, 'dist','index.html'));
 });
 
 const startApolloServer = async (typeDefs, resolvers) => {
-    await server.start();
-    server.applyMiddleware({ app });
+  await server.start();
+  server.applyMiddleware({ app });
   
-    db.once('open', () => {
-      app.listen(PORT, () => {
-        console.log(`API server running on port ${PORT}!`);
-        console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
-      })
+  db.once('open', () => {
+    app.listen(PORT, () => {
+      console.log(`API server running on port ${PORT}!`);
+      console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+    })
   })
 };
     
-    // Call the async function to start the server
-    startApolloServer(typeDefs, resolvers);
+// Call the async function to start the server
+startApolloServer(typeDefs, resolvers);
