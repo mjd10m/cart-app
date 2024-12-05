@@ -35,6 +35,13 @@ function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
       otherwise:() => yup.string().notRequired(),
     })
   })
+  const capitalizeWords = (str) => {
+    if(!str) return ""
+    return str
+      .split(" ")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")
+  }
   const calcPrice = (value) => {
     let newPrice
     if (value === "newPlate") {
@@ -56,7 +63,17 @@ function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
   const nanoid = customAlphabet('1234567890', 10)
   const handleSubmit = (values) => {
     const id = nanoid()
-    setFormData({...formData, ...values, transactionId:id})
+    setFormData({
+      ...formData, 
+      ...values, 
+      firstName:capitalizeWords(values.firstName), 
+      lastName:capitalizeWords(values.lastName), 
+      addr1:capitalizeWords(values.addr1),
+      addr2:capitalizeWords(values.addr2),
+      city:capitalizeWords(values.city), 
+      cartColor:capitalizeWords(values.cartColor), 
+      transactionId:id
+    })
     navigate('/customerPics')
   }
   useEffect(() => {
