@@ -11,6 +11,7 @@ import IntakeFormGroup from '../../components/intake-form-group';
 function DealerCustomer({formData, setFormData, totalPrice, setTotalPrice }) {
   const {Formik} = formik
   const validationSchema = yup.object().shape({
+    dealerName: yup.string().required('Required'),
     firstName: yup.string().required('Required'),
     lastName: yup.string().required('Required'),
     dob: yup.date().required('Required'),
