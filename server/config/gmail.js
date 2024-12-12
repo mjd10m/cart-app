@@ -47,7 +47,7 @@ Bot Mike`
     const email = {
       userId: "me",
       requestBody: {
-      raw: createEmailBody("info@tagmycart.com","mjd10m@outlook.com","New TagMyCart Customer", body),
+      raw: createEmailBody("info@tagmycart.com","info@tagmycart.com","New TagMyCart Customer", body),
       },
     };
     const response = await gmail.users.messages.send(email);
