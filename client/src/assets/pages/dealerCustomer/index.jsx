@@ -36,20 +36,27 @@ function DealerCustomer({formData, setFormData, totalPrice, setTotalPrice }) {
       otherwise:() => yup.string().notRequired(),
     })
   })
+  const capitalizeWords = (str) => {
+    if(!str) return ""
+    return str
+      .split(" ")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")
+  }
   const calcPrice = (value) => {
     let newPrice
     if (value === "newPlate") {
-      newPrice = '828.35'
+      newPrice = '556.85'
     } else if (value === "plateTransfer") {
-      newPrice = '628.35'
+      newPrice = '356.85'
     } else if (value === "specPlate") {
-      newPrice = '858.35'
+      newPrice = '586.85'
     } else if (value === "perPlate") {
-      newPrice = '888.35'
+      newPrice = '616.85'
     } else if (value === "perSpecPlate") {
-      newPrice = '923.35'
+      newPrice = '646.85'
     } else {
-      newPrice = '828.35'
+      newPrice = '556.85'
     }
     setTotalPrice(newPrice)
   }
@@ -57,12 +64,25 @@ function DealerCustomer({formData, setFormData, totalPrice, setTotalPrice }) {
   const nanoid = customAlphabet('1234567890', 10)
   const handleSubmit = (values) => {
     const id = nanoid()
-    setFormData({...formData, ...values, transactionId:id})
+    setFormData({
+      ...formData, 
+      ...values, 
+      firstName:capitalizeWords(values.firstName), 
+      lastName:capitalizeWords(values.lastName), 
+      addr1:capitalizeWords(values.addr1),
+      addr2:capitalizeWords(values.addr2),
+      city:capitalizeWords(values.city), 
+      cartColor:capitalizeWords(values.cartColor), 
+      transactionId:id
+    })
     navigate('/customerPics')
   }
   useEffect(() => {
     console.log('formData updated:', formData);
   }, [formData]);
+  useEffect(() => {
+    setTotalPrice('556.85');
+  }, [setTotalPrice]);
     
   return(
     <Container fluid style={{ padding: 0, margin: 0 }}>
@@ -76,53 +96,60 @@ function DealerCustomer({formData, setFormData, totalPrice, setTotalPrice }) {
       <Formik validationSchema={validationSchema} onSubmit={handleSubmit} initialValues={{...formData}}>
       {({handleSubmit, handleChange, values, touched, errors  }) => (
         <Form noValidate onSubmit={handleSubmit} className='p-3'>
-          <Row className="justify-content-center mb-3">
-            <IntakeFormGroup label={"Dealership Name"} type="text" xs={12} md={6} controlId="dealerName" name="dealerName" value={values.dealerName} onChange={handleChange} isInvalid={touched.dealerName && !!errors.dealerName} errorMessage={errors.dealerName}/>
-          </Row>
-          <Row className="mb-3">
-            <IntakeFormGroup label={"First Name"} type="text" xs={12} md={4} controlId="firstName" name="firstName" value={values.firstName} onChange={handleChange} isInvalid={touched.firstName && !!errors.firstName} errorMessage={errors.firstName}/>
-            <IntakeFormGroup label={"Last Name"} type="text" xs={12} md={4} controlId="lastName" name="lastName" value={values.lastName} onChange={handleChange} isInvalid={touched.lastName && !!errors.lastName} errorMessage={errors.lastName}/>
-            <IntakeFormGroup label={"Date of Birth"} type="date" xs={12} md={4} controlId="dob" name="dob" value={values.dob} onChange={handleChange} isInvalid={touched.dob && !!errors.dob} errorMessage={errors.dob}/>
-          </Row>
-          <Row className="mb-3">
-            <IntakeFormGroup label={"Address Line 1"} type="text" xs={12} md={7} controlId="address1" name="addr1" value={values.addr1} onChange={handleChange} isInvalid={touched.addr1 && !!errors.addr1} errorMessage={errors.addr1}/>
-            <IntakeFormGroup label={"Address Line 2"} type="text" xs={12} md={5} controlId="address2" name="addr2" value={values.addr2} onChange={handleChange} isInvalid={touched.addr1 && !!errors.addr1} errorMessage={errors.addr1}/>
-          </Row>    
-          <Row className="mb-3">
-            <IntakeFormGroup label={"City"} type="text" xs={12} md={7} controlId="city" name="city" value={values.city} onChange={handleChange} isInvalid={touched.city && !!errors.city} errorMessage={errors.city}/>
-            <IntakeFormGroup label={"State"} type="text" xs={12} md={2} controlId="state" name="state" value={values.state} onChange={handleChange} isInvalid={touched.state && !!errors.state} errorMessage={errors.state}/>
-            <IntakeFormGroup label={"Zipcode"} type="text" xs={12} md={3} controlId="zip" name="zip" value={values.zip} onChange={handleChange} isInvalid={touched.zip && !!errors.zip} errorMessage={errors.zip}/>
-          </Row>
-          <Row className="mb-3">
-            <IntakeFormGroup label={"Email"} type="email" xs={12} md={9} controlId="email" name="email" value={values.email} onChange={handleChange} isInvalid={touched.email && !!errors.email} errorMessage={errors.email}/>
-            <IntakeFormGroup label={"Phone Number"} type="phone" xs={12} md={3} controlId="phone" name="phone" value={values.phone} onChange={handleChange} isInvalid={touched.phone && !!errors.phone} errorMessage={errors.phone}/>
-          </Row>
-          <Row className="mb-3">
-            <IntakeFormGroup label={"Number of Passengers"} type="text" xs={12} md={4} controlId="cartSize" name="cartSize" value={values.cartSize} onChange={handleChange} isInvalid={touched.cartSize && !!errors.cartSize} errorMessage={errors.cartSize} dropdown={true} dropdownData={passengerOptions}/>
-            <IntakeFormGroup label={"Cart Color"} type="text" xs={12} md={2} controlId="cartColor" name="cartColor" value={values.cartColor} onChange={handleChange} isInvalid={touched.cartColor && !!errors.cartColor} errorMessage={errors.cartColor}/>
-            <IntakeFormGroup label={"Plate Options"} type="text" xs={12} md={6} controlId="plate" name="plate" value={values.plate} onChange={(e)=> {calcPrice(e.target.value); handleChange(e)}} isInvalid={touched.plate && !!errors.plate} errorMessage={errors.plate} dropdown={true} dropdownData={plateOptions}/>
-          </Row>
-          {values.plate === "plateTransfer" ?(
-            <Row className="mb-3 justify-content-center">
-              <IntakeFormGroup label={"Plate Number"} type="text" xs={12} md={4} controlId="plateNum" name="plateNum" value={values.plateNum} onChange={handleChange} isInvalid={touched.plateNum && !!errors.plateNum} errorMessage={errors.plateNum}/>
+          <fieldset className='mb-3'>
+            <legend className='h5 mb-3 legend-centered'>Dealer Info</legend>
+            <Row className="justify-content-center mb-3">
+              <IntakeFormGroup label={"Dealership Name"} type="text" xs={12} md={5} controlId="dealerName" name="dealerName" value={values.dealerName} onChange={handleChange} isInvalid={touched.dealerName && !!errors.dealerName} errorMessage={errors.dealerName}/>
+              <IntakeFormGroup label={"Email"} type="email" xs={12} md={4} controlId="email" name="email" value={values.email} onChange={handleChange} isInvalid={touched.email && !!errors.email} errorMessage={errors.email}/>
+              <IntakeFormGroup label={"Phone Number"} type="phone" xs={12} md={3} controlId="phone" name="phone" value={values.phone} onChange={handleChange} isInvalid={touched.phone && !!errors.phone} errorMessage={errors.phone}/>
             </Row>
-          ): null }
-          {values.plate === "specPlate" ?(
-            <Row className="mb-3 justify-content-center">
-              <IntakeFormGroup label={"Plate Type"} type="text" xs={12} md={4} controlId="plateType" name="plateType" value={values.plateType} onChange={handleChange} isInvalid={touched.plateType && !!errors.plateType} errorMessage={errors.plateType}/>
+          </fieldset>
+          <fieldset className='mb-3'>
+            <legend className='h5 mb-3 legend-centered'>Customer Info</legend>
+            <Row className="mb-3">
+              <IntakeFormGroup label={"First Name"} type="text" xs={12} md={4} controlId="firstName" name="firstName" value={values.firstName} onChange={handleChange} isInvalid={touched.firstName && !!errors.firstName} errorMessage={errors.firstName}/>
+              <IntakeFormGroup label={"Last Name"} type="text" xs={12} md={4} controlId="lastName" name="lastName" value={values.lastName} onChange={handleChange} isInvalid={touched.lastName && !!errors.lastName} errorMessage={errors.lastName}/>
+              <IntakeFormGroup label={"Date of Birth"} type="date" xs={12} md={4} controlId="dob" name="dob" value={values.dob} onChange={handleChange} isInvalid={touched.dob && !!errors.dob} errorMessage={errors.dob}/>
             </Row>
-          ): null }
-          {values.plate === "perPlate" ?(
-            <Row className="mb-3 justify-content-center">
-              <IntakeFormGroup label={"Plate Number"} type="text" xs={12} md={4} controlId="plateNum" name="plateNum" value={values.plateNum} onChange={handleChange} isInvalid={touched.plateNum && !!errors.plateNum} errorMessage={errors.plateNum}/>
+            <Row className="mb-3">
+              <IntakeFormGroup label={"Address Line 1"} type="text" xs={12} md={7} controlId="address1" name="addr1" value={values.addr1} onChange={handleChange} isInvalid={touched.addr1 && !!errors.addr1} errorMessage={errors.addr1}/>
+              <IntakeFormGroup label={"Address Line 2"} type="text" xs={12} md={5} controlId="address2" name="addr2" value={values.addr2} onChange={handleChange} isInvalid={touched.addr1 && !!errors.addr1} errorMessage={errors.addr1}/>
+            </Row>    
+            <Row className="mb-3">
+              <IntakeFormGroup label={"City"} type="text" xs={12} md={7} controlId="city" name="city" value={values.city} onChange={handleChange} isInvalid={touched.city && !!errors.city} errorMessage={errors.city}/>
+              <IntakeFormGroup label={"State"} type="text" xs={12} md={2} controlId="state" name="state" value={values.state} onChange={handleChange} isInvalid={touched.state && !!errors.state} errorMessage={errors.state}/>
+              <IntakeFormGroup label={"Zipcode"} type="text" xs={12} md={3} controlId="zip" name="zip" value={values.zip} onChange={handleChange} isInvalid={touched.zip && !!errors.zip} errorMessage={errors.zip}/>
             </Row>
-          ): null }
-          {values.plate === "perSpecPlate" ?(
-            <Row className="mb-3 justify-content-center">
-              <IntakeFormGroup label={"Plate Number"} type="text" xs={12} md={4} controlId="plateNum" name="plateNum" value={values.plateNum} onChange={handleChange} isInvalid={touched.plateNum && !!errors.plateNum} errorMessage={errors.plateNum}/>
-              <IntakeFormGroup label={"Plate Type"} type="text" xs={12} md={4} controlId="plateType" name="plateType" value={values.plateType} onChange={handleChange} isInvalid={touched.plateType && !!errors.plateType} errorMessage={errors.plateType}/>
+          </fieldset>
+          <fieldset className='mb-3'>
+            <legend className='h5 mb-3 legend-centered'>Cart Info</legend>
+            <Row className="mb-3">
+              <IntakeFormGroup label={"Number of Passengers"} type="text" xs={12} md={4} controlId="cartSize" name="cartSize" value={values.cartSize} onChange={handleChange} isInvalid={touched.cartSize && !!errors.cartSize} errorMessage={errors.cartSize} dropdown={true} dropdownData={passengerOptions}/>
+              <IntakeFormGroup label={"Cart Color"} type="text" xs={12} md={2} controlId="cartColor" name="cartColor" value={values.cartColor} onChange={handleChange} isInvalid={touched.cartColor && !!errors.cartColor} errorMessage={errors.cartColor}/>
+              <IntakeFormGroup label={"Plate Options"} type="text" xs={12} md={6} controlId="plate" name="plate" value={values.plate} onChange={(e)=> {calcPrice(e.target.value); handleChange(e)}} isInvalid={touched.plate && !!errors.plate} errorMessage={errors.plate} dropdown={true} dropdownData={plateOptions}/>
             </Row>
+            {values.plate === "plateTransfer" ?(
+              <Row className="mb-3 justify-content-center">
+                <IntakeFormGroup label={"Plate Number"} type="text" xs={12} md={4} controlId="plateNum" name="plateNum" value={values.plateNum} onChange={handleChange} isInvalid={touched.plateNum && !!errors.plateNum} errorMessage={errors.plateNum}/>
+              </Row>
+            ): null }
+            {values.plate === "specPlate" ?(
+              <Row className="mb-3 justify-content-center">
+                <IntakeFormGroup label={"Plate Type"} type="text" xs={12} md={4} controlId="plateType" name="plateType" value={values.plateType} onChange={handleChange} isInvalid={touched.plateType && !!errors.plateType} errorMessage={errors.plateType}/>
+              </Row>
+            ): null }
+            {values.plate === "perPlate" ?(
+              <Row className="mb-3 justify-content-center">
+                <IntakeFormGroup label={"Plate Number"} type="text" xs={12} md={4} controlId="plateNum" name="plateNum" value={values.plateNum} onChange={handleChange} isInvalid={touched.plateNum && !!errors.plateNum} errorMessage={errors.plateNum}/>
+              </Row>
+            ): null }
+            {values.plate === "perSpecPlate" ?(
+              <Row className="mb-3 justify-content-center">
+                <IntakeFormGroup label={"Plate Number"} type="text" xs={12} md={4} controlId="plateNum" name="plateNum" value={values.plateNum} onChange={handleChange} isInvalid={touched.plateNum && !!errors.plateNum} errorMessage={errors.plateNum}/>
+                <IntakeFormGroup label={"Plate Type"} type="text" xs={12} md={4} controlId="plateType" name="plateType" value={values.plateType} onChange={handleChange} isInvalid={touched.plateType && !!errors.plateType} errorMessage={errors.plateType}/>
+              </Row>
           ): null }
+        </fieldset>
           <Row className="justify-content-center mb-3">
             <Col xs="2" className='text-center'>
               <Button className='button w-100' type="submit">

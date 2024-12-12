@@ -79,6 +79,9 @@ function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
   useEffect(() => {
     console.log('formData updated:', formData);
   }, [formData]);
+  useEffect(() => {
+    setTotalPrice('828.35');
+  }, [setTotalPrice]);
     
   return(
     <Container fluid style={{ padding: 0, margin: 0 }}>

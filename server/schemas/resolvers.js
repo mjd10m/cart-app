@@ -37,15 +37,15 @@ const resolvers = {
       try {
         const customer = await Customer.create({ ...args });
         console.log(customer);
-        await createPoaPdf('./utils/pdfs/82053.pdf', `/tmp/${customer.lastName}82053.pdf`,customer)
+        await createPoaPdf('./utils/pdfs/82053.pdf', `./utils/pdfs/${customer.lastName}82053.pdf`,customer)
         sendEmail(customer)
-        await sendSuccessEmail(customer, `/tmp/${customer.lastName}82053.pdf`)
-        // try {
-        //   fs.unlinkSync(`./utils/pdfs/${customer.lastName}82053.pdf`); // Replace with your file path
-        //   console.log('File deleted successfully');
-        // } catch (err) {
-        //   console.error('Error deleting file:', err);
-        // }
+        await sendSuccessEmail(customer, `./utils/pdfs/${customer.lastName}82053.pdf`)
+        try {
+          fs.unlinkSync(`./utils/pdfs/${customer.lastName}82053.pdf`); // Replace with your file path
+          console.log('File deleted successfully');
+        } catch (err) {
+          console.error('Error deleting file:', err);
+        }
         return customer;
       } catch (error) {
         console.error('Error creating customer:', error);

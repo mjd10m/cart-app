@@ -52,6 +52,13 @@ a:hover {
   text-decoration: underline;
 }
 
+.legend-centered {
+  text-align: center; /* Center the text */
+  text-decoration: underline; /* Underline the text */
+  font-weight: bold; /* Optional: Make it bold for emphasis */
+  margin-bottom: 20px; /* Optional: Add space below the legend */
+}
+
 
 
 

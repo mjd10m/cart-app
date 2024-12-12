@@ -5,19 +5,34 @@ const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.C
 
 oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 
-function getPayUrl(urlType) {
-  switch(urlType){
-    case "newPlate":
-      return 'https://www.paypal.com/ncp/payment/VYD5DG9GLQ8JL'
-    case "plateTransfer":
-      return 'https://www.paypal.com/ncp/payment/V2E7KELWY9WQY'
-    case "specPlate":
-      return 'https://www.paypal.com/ncp/payment/XNH8C7PQMK78Q'
-    case "perPlate":
-      return 'https://www.paypal.com/ncp/payment/36LX2LSAT5TTA'
-    case "perSpecPlate":
-      return 'https://www.paypal.com/ncp/payment/TQQ9R2Q3YQ5EG'
-  }  
+function getPayUrl(urlType, dealer) {
+  if (dealer =='') {
+    switch(urlType){
+      case "newPlate":
+        return 'https://www.paypal.com/ncp/payment/VYD5DG9GLQ8JL'
+      case "plateTransfer":
+        return 'https://www.paypal.com/ncp/payment/V2E7KELWY9WQY'
+      case "specPlate":
+        return 'https://www.paypal.com/ncp/payment/XNH8C7PQMK78Q'
+      case "perPlate":
+        return 'https://www.paypal.com/ncp/payment/36LX2LSAT5TTA'
+      case "perSpecPlate":
+        return 'https://www.paypal.com/ncp/payment/TQQ9R2Q3YQ5EG'
+    }
+  } else {
+    switch(urlType){
+      case "newPlate":
+        return 'https://www.paypal.com/ncp/payment/9VNCEDWFXL4G2'
+      case "plateTransfer":
+        return 'https://www.paypal.com/ncp/payment/9K9VFCWCH92YA'
+      case "specPlate":
+        return 'https://www.paypal.com/ncp/payment/NY4292MPZN3YA'
+      case "perPlate":
+        return 'https://www.paypal.com/ncp/payment/4H98QSMUKHJJL'
+      case "perSpecPlate":
+        return 'https://www.paypal.com/ncp/payment/WUZAB5SFPRXNG'
+    } 
+  }
 }
 
 async function sendEmail(customer) {
@@ -26,13 +41,13 @@ async function sendEmail(customer) {
     const body = `
 Hi Mason
     
-    You have a new submission for ${customer.firstName} ${customer.lastName} transaction ID: ${customer.transactionId}
+    You have a new submission for ${customer.dealerName == '' ? (`${customer.firstName} ${customer.lastName}`):(`${customer.dealerName}`)} transaction ID: ${customer.transactionId}
     
 Bot Mike`
     const email = {
       userId: "me",
       requestBody: {
-      raw: createEmailBody("info@tagmycart.com","info@tagmycart.com","New TagMyCart Customer", body),
+      raw: createEmailBody("info@tagmycart.com","mjd10m@outlook.com","New TagMyCart Customer", body),
       },
     };
     const response = await gmail.users.messages.send(email);
@@ -106,14 +121,14 @@ Bot Mike`
 async function sendSuccessEmail(customer, pdfPath) {
   try {
     const gmail = google.gmail({ version: "v1", auth: oAuth2Client });
-    const payUrl = getPayUrl(customer.plate)
+    const payUrl = getPayUrl(customer.plate, customer.dealerName)
     const body = `
 <html>
   <body style="font-family: Arial, sans-serif; line-height: 1.6;">
-    <p>Dear ${customer.firstName} ${customer.lastName},</p>
+    <p>Dear ${customer.dealerName == '' ? (`${customer.firstName} ${customer.lastName}`):(`${customer.dealerName}`)} ,</p>
     <p>I hope this message finds you well. To proceed with your transaction (#${customer.transactionId}), we need you to complete the following steps:</p>
     <ol>
-      <li>Print and Sign Form 82053 – Please print, sign, and mail the physical form to us at:<br>
+      <li>Print and Sign Form 82053 – ${customer.dealerName == '' ? (`Please print, sign, and mail the physical form to us at`):(`Please have ${customer.firstName} ${customer.lastName} print, sign, and mail the physical form to us at`)}:<br>
           Riverview Auto Tag and Title Service<br>
           7423 US Hwy 301 S<br>
           Riverview, FL 33578</li>
