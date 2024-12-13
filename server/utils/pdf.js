@@ -1,10 +1,6 @@
 const {PDFDocument, rgb} = require('pdf-lib')
 const fs = require('fs')
-
-function convertDate(date) {
-  const dateObj = new Date(date)
-  return dateObj.toLocaleDateString('en-us',{year:"numeric", month:"2-digit", day:"2-digit", timeZone: "UTC"})
-}
+const {convertDate} = require('./helper')
 
 async function createPoaPdf(existingPdfPath, outputPdfPath, customer) {
   const today = new Date()

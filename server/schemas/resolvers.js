@@ -1,11 +1,12 @@
 const { Customer, File, User } = require('../models/index');
 const bucket = require('../config/gcloud')
 const {GraphQLUpload} = require("graphql-upload")
-const { sendEmail, sendSignupEmail, sendSuccessEmail } = require("../config/gmail")
+const { sendSuccessEmail } = require("../config/gmail")
 const { signToken, signupToken, checkSignupToken } = require('../utils/auth');
 const { AuthenticationError } = require('apollo-server-express');
 const { createPoaPdf } = require('../utils/pdf');
 const fs = require('fs')
+const {sendNewCustomerNotificationEmail, sendSignupEmail, customerActionEmail} = require('../utils/email/email')
 
 
 const resolvers = {
@@ -38,8 +39,8 @@ const resolvers = {
         const customer = await Customer.create({ ...args });
         console.log(customer);
         await createPoaPdf('./utils/pdfs/82053.pdf', `/tmp/${customer.lastName}82053.pdf`,customer)
-        sendEmail(customer)
-        await sendSuccessEmail(customer, `/tmp/${customer.lastName}82053.pdf`)
+        sendNewCustomerNotificationEmail(customer)
+        await customerActionEmail(customer, `/tmp/${customer.lastName}82053.pdf`)
         // try {
         //   fs.unlinkSync(`./utils/pdfs/${customer.lastName}82053.pdf`); // Replace with your file path
         //   console.log('File deleted successfully');
@@ -76,7 +77,6 @@ const resolvers = {
       return { token, user };
     },
     getSignedUrls: async (parent,{fileName}) => {
-      console.log("In Server")
       const expires = Date.now() + 120000;
       const signedUrls = await Promise.all(
         fileName.map(async(file) => {
