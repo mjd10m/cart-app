@@ -1,11 +1,12 @@
 import React from 'react'
 import TableField from '../table-field'
 import {Container, Row, Col, Button, Form, Spinner, Table } from 'react-bootstrap';
+import { TableRow, TableCell } from '@mui/material';
 
 function TableRecord({customerData, handleClick, index}) {
   return (
     <>
-        <tr>
+        <TableRow>
             <TableField customerData={customerData} id="transactionId"/>
             <TableField customerData={customerData} id='firstName'/>
             <TableField customerData={customerData} id='lastName'/>
@@ -24,10 +25,10 @@ function TableRecord({customerData, handleClick, index}) {
             <TableField customerData={customerData} id='plateType'/>
             <TableField customerData={customerData} id='dealerName'/>
             <TableField customerData={customerData} id='createdAt'/>
-            <td style={{ background: 'none', border: 'none', padding: '0', margin: '0' }}>
+            <TableCell style={{ background: 'none', border: 'none', padding: '0', margin: '0' }}>
                 <Button id={index} onClick={handleClick}>Download</Button>
-            </td>
-        </tr>
+            </TableCell>
+        </TableRow>
     </>
   )
 }

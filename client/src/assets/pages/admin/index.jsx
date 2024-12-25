@@ -1,11 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react'
-import {Container, Row, Col, Button, Form, Spinner, Table } from 'react-bootstrap';
+import {Container, Row, Col, Form, Spinner} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/client'
 import {QUERY_CUSTOMERS} from '../../../utils/queries'
 import {GET_SIGNED_URLS, SIGNUP} from '../../../utils/mutations'
 import TableRecord from '../../components/table-record'
 import TableHeader from '../../components/table-header';
+import SideBar from './sideBar/index'
+import { TextField, Button, Box, FormControl, FormLabel, Table, TableBody, TableContainer, Paper } from '@mui/material';
+
+
 
 function AdminPage() {
 
@@ -77,25 +81,51 @@ function AdminPage() {
   if (error) return <div>Error loading data: {error.message}</div>;
 
   return(
-    <Container>
-      <Table className='mb-3' striped bordered hover responsive>
-      <TableHeader></TableHeader>
-      <tbody>
+    <Box sx={{ display: 'flex' }}>
+      <SideBar></SideBar>
+      <Box sx={{width: '100%', overflow: 'hidden'}}>
+        <TableContainer component={Paper} sx={{ maxHeight: "100vh", maxWidth:"100vw" }}>
+        <Table stickyHeader sx={{minWidth: 650}}>
+        <TableHeader></TableHeader>
+        <TableBody>
           {customers.map((person, index) => (
-              <TableRecord key={index} customerData = {person} handleClick = {handleDownload} index={index}/>
+            <TableRecord key={index} customerData = {person} handleClick = {handleDownload} index={index}/>
           ))}
-      </tbody>
-      </Table>
-      <Row className="justify-content-center align-items-center">
-        <Form noValidate onSubmit={handleSignupEmail} className="d-flex flex-column align-items-center w-100">
-          <Form.Group as={Col} xs={12} md={4} controlId="signupEmail" className="text-center mb-3" >
-            <Form.Label>Invite User</Form.Label>
-            <Form.Control type="text" name="signupEmail" ref = {signupEmail} />
-          </Form.Group>
-          <Button type='submit'>Send Link</Button>
-        </Form>
+        </TableBody>
+        </Table>
+        </TableContainer>
+        <Row className="justify-content-center align-items-center">
+        <Box
+          component="form"
+          noValidate
+          onSubmit={handleSignupEmail}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          width="100%"
+        >
+          <FormControl
+            fullWidth
+            sx={{ width: { xs: '100%', md: '33.33%' }, textAlign: 'center', mb: 3 }}
+          >
+            <FormLabel sx={{color: 'black'}} htmlFor="signupEmail">Invite User</FormLabel>
+            <TextField
+              type="text"
+              name="signupEmail"
+              id="signupEmail"
+              inputRef={signupEmail}
+              variant="outlined"
+              margin="normal"
+            />
+          </FormControl>
+          <Button type="submit" variant="contained" sx={{marginBottom:'50px'}}>
+            Send Link
+          </Button>
+        </Box>
       </Row>
-    </Container>
+    </Box>    
+  </Box>
+    
   )
 }
 

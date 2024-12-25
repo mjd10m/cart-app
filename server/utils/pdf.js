@@ -7,16 +7,13 @@ async function createPoaPdf(existingPdfPath, outputPdfPath, customer) {
   const year = today.getFullYear()
   const day = today.getDate()
   const month = today.getMonth() + 1
-  // Read the existing PDF file
+
   const existingPdfBytes = fs.readFileSync(existingPdfPath);
   
-  // Load the existing PDF using pdf-lib
   const pdfDoc = await PDFDocument.load(existingPdfBytes);
 
-  // Get the first page and add text to it
   const page = pdfDoc.getPages()[0];
-  const { width, height } = page.getSize();
-  console.log('height:' + height + ' width: ' + width)
+
   //today month
   page.drawText(month.toString(), {
     x: 96,
@@ -108,10 +105,9 @@ async function createPoaPdf(existingPdfPath, outputPdfPath, customer) {
     size: 12,
     color: rgb(0, 0, 0),
   });
-  // Save the modified PDF to a new file
+
   const modifiedPdfBytes = await pdfDoc.save();
   fs.writeFileSync(outputPdfPath, modifiedPdfBytes);
-  console.log('Modified PDF saved!');
 }
 
 module.exports = {createPoaPdf}

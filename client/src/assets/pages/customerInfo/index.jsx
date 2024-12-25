@@ -7,6 +7,8 @@ import Topbar from '../../components/topbar'
 import {plateOptions, passengerOptions} from "../../../state/dropdownOptions"
 import { useNavigate } from 'react-router-dom'
 import IntakeFormGroup from '../../components/intake-form-group';
+import { capitalizeWords } from '../../../utils/helper';
+import { calcPrice } from '../../../utils/helper';
 
 function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
   const {Formik} = formik
@@ -35,30 +37,6 @@ function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
       otherwise:() => yup.string().notRequired(),
     })
   })
-  const capitalizeWords = (str) => {
-    if(!str) return ""
-    return str
-      .split(" ")
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ")
-  }
-  const calcPrice = (value) => {
-    let newPrice
-    if (value === "newPlate") {
-      newPrice = '828.35'
-    } else if (value === "plateTransfer") {
-      newPrice = '628.35'
-    } else if (value === "specPlate") {
-      newPrice = '858.35'
-    } else if (value === "perPlate") {
-      newPrice = '888.35'
-    } else if (value === "perSpecPlate") {
-      newPrice = '923.35'
-    } else {
-      newPrice = '828.35'
-    }
-    setTotalPrice(newPrice)
-  }
   const navigate = useNavigate()
   const nanoid = customAlphabet('1234567890', 10)
   const handleSubmit = (values) => {
@@ -128,7 +106,7 @@ function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
           <Row className="mb-3">
             <IntakeFormGroup label={"Number of Passengers"} type="text" xs={12} md={4} controlId="cartSize" name="cartSize" value={values.cartSize} onChange={handleChange} isInvalid={touched.cartSize && !!errors.cartSize} errorMessage={errors.cartSize} dropdown={true} dropdownData={passengerOptions}/>
             <IntakeFormGroup label={"Cart Color"} type="text" xs={12} md={2} controlId="cartColor" name="cartColor" value={values.cartColor} onChange={handleChange} isInvalid={touched.cartColor && !!errors.cartColor} errorMessage={errors.cartColor}/>
-            <IntakeFormGroup label={"Plate Options"} type="text" xs={12} md={6} controlId="plate" name="plate" value={values.plate} onChange={(e)=> {calcPrice(e.target.value); handleChange(e)}} isInvalid={touched.plate && !!errors.plate} errorMessage={errors.plate} dropdown={true} dropdownData={plateOptions}/>
+            <IntakeFormGroup label={"Plate Options"} type="text" xs={12} md={6} controlId="plate" name="plate" value={values.plate} onChange={(e)=> {calcPrice(e.target.value,'indv',setTotalPrice); handleChange(e)}} isInvalid={touched.plate && !!errors.plate} errorMessage={errors.plate} dropdown={true} dropdownData={plateOptions}/>
           </Row>
           {values.plate === "plateTransfer" ?(
             <Row className="mb-3 justify-content-center">
