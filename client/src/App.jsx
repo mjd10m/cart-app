@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {Routes, Route, Navigate} from 'react-router-dom'
+import {Routes, Route, Navigate, Outlet} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import Homepage from './assets/pages/homepage'
@@ -16,6 +16,8 @@ import defaultState from './state/defaultState.js'
 import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink} from '@apollo/client';
 import {createUploadLink} from 'apollo-upload-client'
 import Auth from './utils/auth.js'
+import AdminCustomers from './assets/pages/admin/customers/index.jsx'
+import AdminInvite from './assets/pages/admin/invite/index.jsx'
 
 
 function App() {
@@ -38,7 +40,11 @@ function App() {
           <Route path="/customerinfo" element = {<CustomerInfo formData ={formData} setFormData = {setFormData} totalPrice = {totalPrice} setTotalPrice = {setTotalPrice}/>} />
           <Route path="/customerpics" element = {<CustomerPics formData ={formData} totalPrice = {totalPrice}/>} />
           <Route path='/summary' element={<Summary formData={formData}/>}/>
-          <Route path='/admin' element={Auth.loggedIn() ?(<AdminPage/>):(<Navigate to="/adminlogin" />)}></Route>
+          <Route path='/admin' element={Auth.loggedIn() ?(<Outlet/>):(<Navigate to="/adminlogin" />)}>
+            <Route path='' element={<AdminPage/>}></Route>
+            <Route path='customers' element={<AdminCustomers/>} />
+            <Route path='invite' element={<AdminInvite/>}/>
+          </Route>
           <Route path='/adminlogin' element={<Login/>}></Route>
           <Route path='/signup' element={<Signup/>}></Route>
           <Route path='/intakeselection' element={<FormSelection/>}></Route>

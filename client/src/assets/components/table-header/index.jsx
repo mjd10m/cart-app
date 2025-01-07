@@ -19,8 +19,8 @@ function TableHeader() {
             <TableCell># Passengers</TableCell>
             <TableCell>Color</TableCell>
             <TableCell>Plate Option</TableCell>
-            <TableCell>Plate Type</TableCell>
             <TableCell>Plate Num</TableCell>
+            <TableCell>Plate Type</TableCell>
             <TableCell>Dealership Name</TableCell>
             <TableCell>Submitted Date</TableCell>
             <TableCell></TableCell>

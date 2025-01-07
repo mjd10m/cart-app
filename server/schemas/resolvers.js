@@ -92,8 +92,8 @@ const resolvers = {
           const {createReadStream, filename, mimetype, encoding} = await file
           const blob = bucket.file(filename)
           const blobStream = blob.createWriteStream({
-              resumable:true,
-              contentType: mimetype,
+            resumable:true,
+            contentType: mimetype,
           })
           return new Promise((resolve, reject) => {
             createReadStream()
