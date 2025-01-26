@@ -1,11 +1,9 @@
-const { Customer, File, User } = require('../models/index');
+const { Customer, File, User, Note } = require('../models/index');
 const bucket = require('../config/gcloud')
 const {GraphQLUpload} = require("graphql-upload")
-const { sendSuccessEmail } = require("../config/gmail")
 const { signToken, signupToken, checkSignupToken } = require('../utils/auth');
 const { AuthenticationError } = require('apollo-server-express');
 const { createPoaPdf } = require('../utils/pdf');
-const fs = require('fs')
 const {sendNewCustomerNotificationEmail, sendSignupEmail, customerActionEmail} = require('../utils/email/email')
 
 
@@ -18,9 +16,14 @@ const resolvers = {
       .sort({createdAt: -1})
       .select('-__v')
       .populate('files')
+      .populate({path:'notes', select: '_id transactionId noteText'})
     },
     listFiles: async() => {
       return File.find()
+      .select('-__v')
+    },
+    listNotes: async() => {
+      return Note.find()
       .select('-__v')
     },
     // findCustomer: async () => {
@@ -47,6 +50,15 @@ const resolvers = {
         throw new Error('Failed to create customer');
       }
     },
+    updateCustomer: async (parent, args) => {
+      const customerId = args.transactionId
+      try {
+        return await Customer.findOneAndUpdate({transactionId: customerId}, args, { new: true });
+      } catch (error) {
+        console.error('Error updating customer:', error);
+        throw new Error('Failed to update customer');
+      }
+    },
     signup: async (parent, {email}) => {
       const token = signupToken(email)
       const url = `https://tagmycart.com/signup?token=${token}`
@@ -57,6 +69,10 @@ const resolvers = {
       const user = await User.create({username: args.username, password: args.password});
       const token = signToken(user);
       return { token, user };
+    },
+    addNote: async (parent, args) => {
+      const note = await Note.create({...args})
+      return note
     },
     login: async (parent, { username, password }) => {
       const user = await User.findOne({ username });

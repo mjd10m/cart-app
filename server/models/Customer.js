@@ -97,6 +97,11 @@ customerSchema.virtual('files', {
   localField: 'transactionId', 
   foreignField: 'transactionId' 
 });
+customerSchema.virtual('notes', {
+  ref: 'Note',              
+  localField: 'transactionId', 
+  foreignField: 'transactionId' 
+});
 
 customerSchema.set("toObject", { virtuals: true });
 customerSchema.set("toJSON", { virtuals: true });

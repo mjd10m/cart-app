@@ -3,11 +3,11 @@ import {Container, Row, Col, Form, Spinner} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/client'
 import {QUERY_CUSTOMERS} from '../../../../utils/queries'
-import {GET_SIGNED_URLS, SIGNUP} from '../../../../utils/mutations'
+import {GET_SIGNED_URLS, SIGNUP, UPDATE_CUSTOMER} from '../../../../utils/mutations'
 import TableRecord from '../../../components/table-record'
 import TableHeader from '../../../components/table-header';
 import SideBar from '../sideBar/index'
-import {Box,Table, TableBody, TableContainer, Paper } from '@mui/material';
+import {Box,Table, TableBody, TableContainer, Paper, Dialog, DialogContent, DialogActions, DialogTitle, Button} from '@mui/material';
 import { DataGrid, GridToolbar} from '@mui/x-data-grid';
 import { convertDate } from '../../../../utils/helper';
 
@@ -16,7 +16,10 @@ import { convertDate } from '../../../../utils/helper';
 function AdminCustomers() {
   const {loading, error, data} = useQuery(QUERY_CUSTOMERS);
   const [getSignedUrl, { data: urlData, loading: urlLoading, error: urlError }] = useMutation(GET_SIGNED_URLS);
+  const [updateCustomer, { data: customerData, loading: customerLoading, error: customerError }] = useMutation(UPDATE_CUSTOMER);
   const [customers, setCustomers] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   async function downloadFile(signedUrl, fileName) {
     try {
@@ -53,6 +56,29 @@ function AdminCustomers() {
     } catch (err) {
       console.error("Error fetching signed URL:", err);
     }
+  }
+  function handleViewDetails(id) {
+    const customer = customers[id];
+    console.log("Viewing details for:", customer);
+    setSelectedCustomer(customer);
+    setIsModalOpen(true);
+  }
+  async function handleFieldUpdate(newRow, oldRow) {
+    console.log('Processing update:', { newRow, oldRow });
+    const updatedRows = customers.map((customer) =>
+      customer.transactionId === newRow.transactionId ? { ...customer, ...newRow } : customer
+    );
+    setCustomers(updatedRows);
+    console.log('After Update:', customers);
+    try {
+      const {data} = await updateCustomer({
+          variables: {...newRow },
+      });
+      console.log("New Customer", data);
+    } catch (err) {
+      console.error("Error posting customer update", err);
+    }
+    return newRow; 
   }
   if(!loading) {
     console.log(data.listCustomers);
@@ -269,10 +295,28 @@ function AdminCustomers() {
             },
           },
         }}
+        processRowUpdate={handleFieldUpdate} 
         pageSizeOptions={[10]}
         disableRowSelectionOnClick
       />
       </Box>
+      {/* Modal */}
+      {isModalOpen && (
+        <Dialog onClose={() => setIsModalOpen(false)} open={isModalOpen}>
+          <DialogTitle>Customer Details</DialogTitle>
+          <DialogContent>
+          {Object.keys(selectedCustomer).map((key) => (
+            <div key={key} style={{ marginBottom: '8px' }}>
+              <strong>{key}: </strong>
+              <span>{selectedCustomer[key]}</span>
+            </div>
+          ))}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setIsModalOpen(false)}>Close</Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </Box>
   )
 }

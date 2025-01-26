@@ -24,8 +24,10 @@ const typeDefs = gql`
     dealerName: String
     createdAt: Date!
     files: [File]
+    notes: [Note]
   }
   type File {
+    _id: ID!
     filename: String!
     mimetype: String!
     encoding: String!
@@ -34,6 +36,7 @@ const typeDefs = gql`
     createdAt: Date!
   }
   type User {
+    _id: ID!
     username: String!
     password: String!
   }
@@ -41,10 +44,16 @@ const typeDefs = gql`
     token: ID!
     user: User
   }
+  type Note {
+    _id: ID!
+    transactionId: String!
+    noteText: String!
+  }
   type Query {
     listCustomers: [Customer]
     listFiles: [File]
     validateSignupToken(token: String!): Boolean
+    listNotes: [Note]
   }
   type Mutation {
     addCustomer(transactionId: String!, firstName: String!, lastName: String!, dob: Date!, addr1: String!, addr2: String, city: String!, state: String!, zip: String!, email: String!, phone: String!, cartSize: String!, cartColor: String!, plate: String!, plateNum: String, plateType: String, dealerName: String): Customer
@@ -53,6 +62,8 @@ const typeDefs = gql`
     addUser(username: String!, password: String!): Auth
     login(username: String!, password: String!): Auth
     signup(email: String!): String!
+    updateCustomer(transactionId: String!, firstName: String!, lastName: String!, dob: Date!, addr1: String!, addr2: String, city: String!, state: String!, zip: String!, email: String!, phone: String!, cartSize: String!, cartColor: String!, plate: String!, plateNum: String, plateType: String, dealerName: String): Customer
+    addNote(transactionId: String!, noteText: String!): Note
   }
 `;
 
