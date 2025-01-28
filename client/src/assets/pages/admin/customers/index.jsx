@@ -305,12 +305,17 @@ function AdminCustomers() {
         <Dialog onClose={() => setIsModalOpen(false)} open={isModalOpen}>
           <DialogTitle>Customer Details</DialogTitle>
           <DialogContent>
-          {Object.keys(selectedCustomer).map((key) => (
-            <div key={key} style={{ marginBottom: '8px' }}>
-              <strong>{key}: </strong>
-              <span>{selectedCustomer[key]}</span>
-            </div>
-          ))}
+          {Object.keys(selectedCustomer).map((key) => {
+            if(key === 'notes' || key === 'files') {
+              return null
+            } else {
+              return (
+              <div key={key} style={{ marginBottom: '8px' }}>
+                <strong>{key}: </strong>
+                <span>{selectedCustomer[key]}</span>
+              </div>
+              )
+            }})}
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setIsModalOpen(false)}>Close</Button>

@@ -30,6 +30,11 @@ export const QUERY_CUSTOMERS = gql`
                 mimetype
                 transactionId
             }
+            notes {
+                _id
+                transactionId
+                noteText
+            }
         }
     }
 `

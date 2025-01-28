@@ -16,7 +16,7 @@ const resolvers = {
       .sort({createdAt: -1})
       .select('-__v')
       .populate('files')
-      .populate({path:'notes', select: '_id transactionId noteText'})
+      .populate('notes')
     },
     listFiles: async() => {
       return File.find()
