@@ -3,23 +3,38 @@ import {Container, Row, Col, Form, Spinner} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/client'
 import {QUERY_CUSTOMERS} from '../../../../utils/queries'
-import {GET_SIGNED_URLS, SIGNUP, UPDATE_CUSTOMER} from '../../../../utils/mutations'
+import {GET_SIGNED_URLS, SIGNUP, UPDATE_CUSTOMER, ADD_NOTE} from '../../../../utils/mutations'
 import TableRecord from '../../../components/table-record'
 import TableHeader from '../../../components/table-header';
 import SideBar from '../sideBar/index'
 import {Box,Table, TableBody, TableContainer, Paper, Dialog, DialogContent, DialogActions, DialogTitle, Button} from '@mui/material';
 import { DataGrid, GridToolbar} from '@mui/x-data-grid';
 import { convertDate } from '../../../../utils/helper';
+import {
+  Modal,
+  Typography,
+  TextField,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+} from "@mui/material";
+import { Edit, Delete } from "@mui/icons-material";
 
 
 
 function AdminCustomers() {
-  const {loading, error, data} = useQuery(QUERY_CUSTOMERS);
+  const {loading, error, data, refetch} = useQuery(QUERY_CUSTOMERS);
   const [getSignedUrl, { data: urlData, loading: urlLoading, error: urlError }] = useMutation(GET_SIGNED_URLS);
   const [updateCustomer, { data: customerData, loading: customerLoading, error: customerError }] = useMutation(UPDATE_CUSTOMER);
+  const [addNote, { data: noteData, loading: noteLoading, error: noteError }] = useMutation(ADD_NOTE);
   const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newNote, setNewNote] = useState("");
+  const [modalNotes, setModalNotes] = useState([])
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingText, setEditingText] = useState("");
 
   async function downloadFile(signedUrl, fileName) {
     try {
@@ -60,7 +75,8 @@ function AdminCustomers() {
   function handleViewDetails(id) {
     const customer = customers[id];
     console.log("Viewing details for:", customer);
-    setSelectedCustomer(customer);
+    setModalNotes(customer.notes)
+    setSelectedCustomer(customer)
     setIsModalOpen(true);
   }
   async function handleFieldUpdate(newRow, oldRow) {
@@ -83,12 +99,36 @@ function AdminCustomers() {
   if(!loading) {
     console.log(data.listCustomers);
   }
+  async function handleAddNote(){
+    try {
+      const {data} = await addNote({
+        variables: {
+          transactionId: selectedCustomer.transactionId,
+          noteText: newNote
+        }
+      })
+      console.log(data) 
+      setModalNotes((prevNotes) => {
+        const updatedNotes = [...prevNotes, data.addNote];
+        console.log("Updated Notes:", updatedNotes); // Logs updated state
+        return updatedNotes;
+      });
+    } catch (error) {
+      console.log("Error adding note" + error)
+    }
+    setNewNote("")
+  }
+  const handleEditNote = (index) => {
+    console.log(selectedCustomer.notes)
+    setEditingIndex(index);
+    setEditingText(selectedCustomer.notes[index].noteText);
+  };
 
   useEffect(()=> {
     if(!loading && data?.listCustomers) {
       setCustomers(data.listCustomers);
     }
-  },[loading, data]);
+  },[loading, data, isModalOpen]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading data: {error.message}</div>;
@@ -98,6 +138,7 @@ function AdminCustomers() {
     customer.map((person, index) => {
       const row = {
         id: index,
+        status: person.status,
         transactionId: person.transactionId,    
         firstName: person.firstName,
         lastName: person.lastName,
@@ -170,6 +211,14 @@ function AdminCustomers() {
       ),
     },
     {
+      field: 'status',
+      headerName: 'Status',
+      width: 120,
+      editable: true,
+      type: "singleSelect",
+      valueOptions: ["New", "Pending Payment/POA", "In Process", "Completed"],
+    },
+    {
       field: 'transactionId',
       headerName: 'Transaction ID',
       width: 120,
@@ -191,7 +240,7 @@ function AdminCustomers() {
       field: 'dob',
       headerName: 'Date of Birth',
       width: 110,
-      editable: true
+      editable: true,
     },
     {
       field: 'addr1',
@@ -239,7 +288,9 @@ function AdminCustomers() {
       field: 'cartSize',
       headerName: 'Passengers',
       width: 94,
-      editable: true
+      editable: true,
+      type: "singleSelect",
+      valueOptions: ["2", "4", "6", "8"],
     },
     {
       field: 'cartColor',
@@ -251,7 +302,9 @@ function AdminCustomers() {
       field: 'plate',
       headerName: 'Plate',
       width: 130,
-      editable: true
+      editable: true,
+      type: "singleSelect",
+      valueOptions: ["newPlate", "plateTransfer", "specPlate", "perPlate","perSpecPlate"],
     },
     {
       field: 'plateNum',
@@ -301,27 +354,61 @@ function AdminCustomers() {
       />
       </Box>
       {/* Modal */}
-      {isModalOpen && (
-        <Dialog onClose={() => setIsModalOpen(false)} open={isModalOpen}>
-          <DialogTitle>Customer Details</DialogTitle>
-          <DialogContent>
-          {Object.keys(selectedCustomer).map((key) => {
-            if(key === 'notes' || key === 'files') {
-              return null
-            } else {
-              return (
-              <div key={key} style={{ marginBottom: '8px' }}>
-                <strong>{key}: </strong>
-                <span>{selectedCustomer[key]}</span>
-              </div>
-              )
-            }})}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setIsModalOpen(false)}>Close</Button>
-          </DialogActions>
-        </Dialog>
-      )}
+        <Modal open={isModalOpen} onClose={() => {setIsModalOpen(false); refetch()}}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "75%",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <Typography variant="h6">Notes</Typography>
+          {modalNotes?.length > 0 ?(
+          <List>
+            {modalNotes.map((note, index) => (
+              <ListItem key={index}>
+                {editingIndex === index ? (
+                  <TextField
+                  id={note._id}
+                    fullWidth
+                    value={editingText}
+                    onChange={(e) => setEditingText(e.target.value)}
+                  />
+                ) : (
+                  <ListItemText primary={note.noteText} />
+                )}
+                <IconButton onClick={() => handleEditNote(index)}>
+                  <Edit />
+                </IconButton>
+                <IconButton onClick={console.log("Click")}>
+                  <Delete />
+                </IconButton>
+                {editingIndex === index && (
+                  <Button onClick={console.log("Click")}>Save</Button>
+                )}
+              </ListItem>
+            ))}
+          </List>
+          ) :(<div></div>)}
+          <TextField
+            fullWidth
+            label="Add a note"
+            variant="outlined"
+            value={newNote}
+            onChange={(e) => setNewNote(e.target.value)}
+            sx={{ mt: 2 }}
+          />
+          <Button variant="contained" onClick={() => handleAddNote()} sx={{ mt: 2 }}>
+            Add Note
+          </Button>
+        </Box>
+      </Modal>
     </Box>
   )
 }

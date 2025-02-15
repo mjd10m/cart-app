@@ -50,7 +50,8 @@ function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
       addr2:capitalizeWords(values.addr2),
       city:capitalizeWords(values.city), 
       cartColor:capitalizeWords(values.cartColor), 
-      transactionId:id
+      transactionId:id,
+      status:'New'
     })
     navigate('/customerPics')
   }

@@ -88,7 +88,11 @@ const customerSchema = new Schema(
       type: Date,
       default: Date.now,
       required: true
-    }
+    },
+    status: {
+      type: String,
+      trim: true
+    },
   }
 );
 

@@ -1,8 +1,8 @@
 import {gql} from '@apollo/client'
 
 export const ADD_CUSTOMER = gql `
-    mutation Mutation($transactionId: String!, $firstName: String!, $lastName: String!, $dob: Date!, $addr1: String!, $city: String!, $state: String!, $zip: String!, $email: String!, $phone: String!, $cartSize: String!, $cartColor: String!, $plate: String!, $addr2: String, $plateNum: String, $plateType: String, $dealerName: String) {
-        addCustomer(transactionId: $transactionId, firstName: $firstName, lastName: $lastName, dob: $dob, addr1: $addr1, city: $city, state: $state, zip: $zip, email: $email, phone: $phone, cartSize: $cartSize, cartColor: $cartColor, plate: $plate, addr2: $addr2, plateNum: $plateNum, plateType: $plateType, dealerName: $dealerName) {
+    mutation Mutation($transactionId: String!, $firstName: String!, $lastName: String!, $dob: Date!, $addr1: String!, $city: String!, $state: String!, $zip: String!, $email: String!, $phone: String!, $cartSize: String!, $cartColor: String!, $plate: String!, $addr2: String, $plateNum: String, $plateType: String, $dealerName: String, $status: String) {
+        addCustomer(transactionId: $transactionId, firstName: $firstName, lastName: $lastName, dob: $dob, addr1: $addr1, city: $city, state: $state, zip: $zip, email: $email, phone: $phone, cartSize: $cartSize, cartColor: $cartColor, plate: $plate, addr2: $addr2, plateNum: $plateNum, plateType: $plateType, dealerName: $dealerName, status: $status) {
             firstName
             lastName
         }
@@ -49,10 +49,19 @@ export const SIGNUP = gql `
     }
 `
 export const UPDATE_CUSTOMER = gql `
-    mutation UpdateCustomer($transactionId: String!, $firstName: String!, $lastName: String!, $dob: Date!, $addr1: String!, $city: String!, $state: String!, $zip: String!, $email: String!, $phone: String!, $cartSize: String!, $cartColor: String!, $plate: String!, $addr2: String, $plateNum: String, $plateType: String, $dealerName: String) {
-        updateCustomer(transactionId: $transactionId, firstName: $firstName, lastName: $lastName, dob: $dob, addr1: $addr1, city: $city, state: $state, zip: $zip, email: $email, phone: $phone, cartSize: $cartSize, cartColor: $cartColor, plate: $plate, addr2: $addr2, plateNum: $plateNum, plateType: $plateType, dealerName: $dealerName) {
+    mutation UpdateCustomer($transactionId: String!, $firstName: String!, $lastName: String!, $dob: Date!, $addr1: String!, $city: String!, $state: String!, $zip: String!, $email: String!, $phone: String!, $cartSize: String!, $cartColor: String!, $plate: String!, $addr2: String, $plateNum: String, $plateType: String, $dealerName: String, $status: String) {
+        updateCustomer(transactionId: $transactionId, firstName: $firstName, lastName: $lastName, dob: $dob, addr1: $addr1, city: $city, state: $state, zip: $zip, email: $email, phone: $phone, cartSize: $cartSize, cartColor: $cartColor, plate: $plate, addr2: $addr2, plateNum: $plateNum, plateType: $plateType, dealerName: $dealerName, status: $status) {
             firstName
             lastName
+        }
+    }
+`
+export const ADD_NOTE = gql `
+    mutation AddNote($transactionId: String!, $noteText: String!) {
+        addNote(transactionId: $transactionId, noteText: $noteText) {
+            _id
+            noteText
+            transactionId
         }
     }
 `

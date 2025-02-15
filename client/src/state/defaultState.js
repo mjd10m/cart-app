@@ -15,7 +15,8 @@ const defaultState = {
   plate: '',
   plateNum:'',
   plateType:'',
-  dealerName:''
+  dealerName:'',
+  status:''
   };
   
   export default defaultState;
