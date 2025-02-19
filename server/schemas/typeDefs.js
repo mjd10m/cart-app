@@ -65,6 +65,8 @@ const typeDefs = gql`
     signup(email: String!): String!
     updateCustomer(transactionId: String!, firstName: String!, lastName: String!, dob: Date!, addr1: String!, addr2: String, city: String!, state: String!, zip: String!, email: String!, phone: String!, cartSize: String!, cartColor: String!, plate: String!, plateNum: String, plateType: String, dealerName: String, status: String): Customer
     addNote(transactionId: String!, noteText: String!): Note
+    deleteNote(_id: ID!): Note
+    updateNote(_id: ID!, noteText: String): Note
   }
 `;
 

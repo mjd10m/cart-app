@@ -65,3 +65,20 @@ export const ADD_NOTE = gql `
         }
     }
 `
+export const DELETE_NOTE = gql `
+    mutation DeleteNote($_id: ID!) {
+        deleteNote(_id: $_id) {
+            _id
+            noteText
+            transactionId
+        }
+    }
+`
+export const UPDATE_NOTE = gql`
+  mutation UpdateNote($_id: ID!, $noteText: String!) {
+    updateNote(_id: $_id, noteText: $noteText) {
+      _id
+      noteText
+    }
+  }
+`;

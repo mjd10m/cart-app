@@ -3,7 +3,7 @@ import {Container, Row, Col, Form, Spinner} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/client'
 import {QUERY_CUSTOMERS} from '../../../../utils/queries'
-import {GET_SIGNED_URLS, SIGNUP, UPDATE_CUSTOMER, ADD_NOTE} from '../../../../utils/mutations'
+import {GET_SIGNED_URLS, SIGNUP, UPDATE_CUSTOMER, ADD_NOTE, DELETE_NOTE, UPDATE_NOTE} from '../../../../utils/mutations'
 import TableRecord from '../../../components/table-record'
 import TableHeader from '../../../components/table-header';
 import SideBar from '../sideBar/index'
@@ -27,6 +27,8 @@ function AdminCustomers() {
   const {loading, error, data, refetch} = useQuery(QUERY_CUSTOMERS);
   const [getSignedUrl, { data: urlData, loading: urlLoading, error: urlError }] = useMutation(GET_SIGNED_URLS);
   const [updateCustomer, { data: customerData, loading: customerLoading, error: customerError }] = useMutation(UPDATE_CUSTOMER);
+  const [deleteNote] = useMutation(DELETE_NOTE);
+  const [updateNote] = useMutation(UPDATE_NOTE);
   const [addNote, { data: noteData, loading: noteLoading, error: noteError }] = useMutation(ADD_NOTE);
   const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -121,8 +123,19 @@ function AdminCustomers() {
   const handleEditNote = (index) => {
     console.log(selectedCustomer.notes)
     setEditingIndex(index);
-    setEditingText(selectedCustomer.notes[index].noteText);
+    setEditingText(modalNotes[index].noteText);
   };
+  async function handleDeleteNote(noteId) {
+    console.log(noteId)
+    await deleteNote({ variables: { _id: noteId} });
+    setModalNotes((prevNotes) => prevNotes.filter((note) => note._id !== noteId));
+  }
+  async function handleUpdateNote(noteId){
+    console.log(noteId)
+    await updateNote({variables: {_id: noteId, noteText: editingText}})
+    setModalNotes((prevNotes) => prevNotes.map((note) => note._id === noteId ? {...note, noteText: editingText} : note))
+    setEditingIndex(null)
+  }
 
   useEffect(()=> {
     if(!loading && data?.listCustomers) {
@@ -205,7 +218,7 @@ function AdminCustomers() {
               height:'50%'
             }}
           >
-            View Details
+            View Notes
           </button>
         </div>
       ),
@@ -386,11 +399,11 @@ function AdminCustomers() {
                 <IconButton onClick={() => handleEditNote(index)}>
                   <Edit />
                 </IconButton>
-                <IconButton onClick={console.log("Click")}>
+                <IconButton id={note._id} onClick={() => handleDeleteNote(note._id)}>
                   <Delete />
                 </IconButton>
                 {editingIndex === index && (
-                  <Button onClick={console.log("Click")}>Save</Button>
+                  <Button onClick={()=> handleUpdateNote(note._id)}>Save</Button>
                 )}
               </ListItem>
             ))}

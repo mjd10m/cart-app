@@ -13,10 +13,9 @@ function createEmailBody(from, to, subject, body) {
 }
 
 //Helper function to create email with attachment
-function createEmailBodyAttachment(from, to, subject, body, attachmentPath, attachmentFileName) {
-  const attachmentData = fs.readFileSync(attachmentPath).toString("base64");
+function createEmailBodyAttachment(from, to, subject, body, attachments) {
   const boundary = "boundary_string";
-  const message = [
+  let message = [
     `From: ${from.trim()}`,
     `To: ${to.trim()}`,
     `Subject: ${subject}`,
@@ -29,15 +28,21 @@ function createEmailBodyAttachment(from, to, subject, body, attachmentPath, atta
     ``,
     `${body}`,
     ``,
-    `--${boundary}`,
-    `Content-Type: application/pdf; name="${attachmentFileName}"`, // Change to the correct MIME type if not a PDF
-    `Content-Disposition: attachment; filename="${attachmentFileName}"`, // This ensures the file is an attachment
-    `Content-Transfer-Encoding: base64`,
-    ``,
-    `${attachmentData}`,
-    ``,
-    `--${boundary}--`,
   ].join("\r\n");
+  attachments.forEach(({path, filename}) => {
+    const attachmentData = fs.readFileSync(path).toString("base64");
+    message += [
+      `--${boundary}`,
+      `Content-Type: application/pdf; name="${filename}"`, // Change to the correct MIME type if not a PDF
+      `Content-Disposition: attachment; filename="${filename}"`, // This ensures the file is an attachment
+      `Content-Transfer-Encoding: base64`,
+      ``,
+      `${attachmentData}`,
+      ``,
+    ].join("\r\n") 
+  });
+  message += `--${boundary}--`
+
   return Buffer.from(message)
   .toString("base64")
   .replace(/\+/g, "-")
@@ -45,13 +50,13 @@ function createEmailBodyAttachment(from, to, subject, body, attachmentPath, atta
   .replace(/=+$/, "");
 }
 
-async function sendNewCustomerNotificationEmail(customer) {
+async function sendNewCustomerNotificationEmail(customer, pdfPath) {
   try {
     const body = newCustomerNotificationBody(customer)
     const email = {
       userId: "me",
       requestBody: {
-      raw: createEmailBody("info@tagmycart.com","mjd10m@outlook.com","New TagMyCart Customer", body),
+      raw: createEmailBodyAttachment("info@tagmycart.com","mjd10m@outlook.com","New TagMyCart Customer", body,[{path: pdfPath[0], filename:`${customer.lastName} 82040.pdf`}, {path: pdfPath[1], filename:`${customer.lastName} 84491.pdf`}, {path: pdfPath[2], filename:`${customer.lastName} 84490.pdf`},{path: pdfPath[3], filename:`${customer.lastName} 86064.pdf`}]),
       },
     };
     const response = await gmail.users.messages.send(email);
@@ -84,7 +89,7 @@ async function customerActionEmail(customer, pdfPath) {
     const email = {
         userId: "me",
         requestBody: {
-        raw: createEmailBodyAttachment("info@tagmycart.com",customer.email,`Action Required: Transaction #${customer.transactionId} - Form 82053 and Payment Needed`, body, pdfPath, `${customer.lastName} POA.pdf`),
+        raw: createEmailBodyAttachment("info@tagmycart.com",customer.email,`Action Required: Transaction #${customer.transactionId} - Form 82053 and Payment Needed`, body, [{path: pdfPath, filename:`${customer.lastName} POA.pdf`}]),
         },
       };
       const response = await gmail.users.messages.send(email);

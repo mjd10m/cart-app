@@ -4,7 +4,11 @@ const {GraphQLUpload} = require("graphql-upload")
 const { signToken, signupToken, checkSignupToken } = require('../utils/auth');
 const { AuthenticationError } = require('apollo-server-express');
 const { createPoaPdf } = require('../utils/pdf');
-const {sendNewCustomerNotificationEmail, sendSignupEmail, customerActionEmail} = require('../utils/email/email')
+const {sendNewCustomerNotificationEmail, sendSignupEmail, customerActionEmail} = require('../utils/email/email');
+const { create82040Pdf } = require('../utils/82040pdf');
+const { create84491Pdf } = require('../utils/84491pdf');
+const { create86064Pdf } = require('../utils/86064pdf');
+const { create84490Pdf } = require('../utils/84490pdf');
 
 
 const resolvers = {
@@ -42,7 +46,11 @@ const resolvers = {
         const customer = await Customer.create({ ...args });
         console.log(customer);
         await createPoaPdf('./utils/pdfs/82053.pdf', `/tmp/${customer.lastName}82053.pdf`,customer)
-        await sendNewCustomerNotificationEmail(customer)
+        await create82040Pdf('./utils/pdfs/82040.pdf', `/tmp/${customer.lastName}82040.pdf`,customer)
+        await create84491Pdf('./utils/pdfs/84491.pdf', `/tmp/${customer.lastName}84491.pdf`,customer)
+        await create86064Pdf('./utils/pdfs/86064.pdf',`/tmp/${customer.lastName}86064.pdf`,customer)
+        await create84490Pdf('./utils/pdfs/84490.pdf', `/tmp/${customer.lastName}84490.pdf`,customer)
+        await sendNewCustomerNotificationEmail(customer,[`/tmp/${customer.lastName}82040.pdf`, `/tmp/${customer.lastName}84491.pdf`, `/tmp/${customer.lastName}84490.pdf`, `/tmp/${customer.lastName}86064.pdf`])
         await customerActionEmail(customer, `/tmp/${customer.lastName}82053.pdf`)
         return customer;
       } catch (error) {
@@ -72,6 +80,14 @@ const resolvers = {
     },
     addNote: async (parent, args) => {
       const note = await Note.create({...args})
+      return note
+    },
+    deleteNote: async(parent, {_id}) => {
+      const note = await Note.findByIdAndDelete(_id)
+      return note
+    },
+    updateNote: async(parent, args) => {
+      const note = await Note.findByIdAndUpdate(args._id, {noteText:args.noteText}, {new:true})
       return note
     },
     login: async (parent, { username, password }) => {
