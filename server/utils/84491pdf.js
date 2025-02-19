@@ -9,7 +9,7 @@ async function create84491Pdf(existingPdfPath, outputPdfPath, customer) {
   
   const pdfDoc = await PDFDocument.load(existingPdfBytes,{ ignoreEncryption: true });
   const page1 = pdfDoc.getPages()[0];
-  const page3 = pdfDoc.getPages()[2];
+  const page2 = pdfDoc.getPages()[1];
 
   //today year cart
   page1.drawText(year.toString(), {
@@ -26,9 +26,9 @@ async function create84491Pdf(existingPdfPath, outputPdfPath, customer) {
     color: rgb(0, 0, 0),
   });
   //name
-  page3.drawText(`${customer.firstName} ${customer.lastName}`, {
-    x: 50,
-    y: 605,
+  page2.drawText(`${customer.firstName} ${customer.lastName}`, {
+    x: 40,
+    y: 170,
     size: 12,
     color: rgb(0, 0, 0),
   });
