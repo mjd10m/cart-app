@@ -39,9 +39,9 @@ function CustomerInfo({formData, setFormData, totalPrice, setTotalPrice }) {
   })
   const navigate = useNavigate()
   const nanoid = customAlphabet('1234567890', 10)
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     const id = nanoid()
-    setFormData({
+    await setFormData({
       ...formData, 
       ...values, 
       firstName:capitalizeWords(values.firstName), 
