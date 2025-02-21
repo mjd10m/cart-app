@@ -23,6 +23,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(graphqlUploadExpress({ maxFileSize: 1000000000, maxFiles: 15 }));
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use((req, res) => {
+  res.status(404).send('Not Found');
+});
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist','index.html'));
 });
@@ -30,9 +33,7 @@ app.get('*', (req, res) => {
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
   server.applyMiddleware({ app });
-  app.use((req, res) => {
-    res.status(404).send('Not Found');
-  });
+  
   db.once('open', () => {
     app.listen(PORT, () => {
       console.log(`API server running on port ${PORT}!`);
