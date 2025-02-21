@@ -30,7 +30,9 @@ app.get('*', (req, res) => {
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
   server.applyMiddleware({ app });
-  
+  app.use((req, res) => {
+    res.status(404).send('Not Found');
+  });
   db.once('open', () => {
     app.listen(PORT, () => {
       console.log(`API server running on port ${PORT}!`);
