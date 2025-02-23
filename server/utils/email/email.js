@@ -56,7 +56,7 @@ async function sendNewCustomerNotificationEmail(customer, pdfPath) {
     const email = {
       userId: "me",
       requestBody: {
-      raw: createEmailBodyAttachment("info@tagmycart.com","info@tagmycart.com","New TagMyCart Customer", body,[{path: pdfPath[0], filename:`${customer.lastName} 82040.pdf`}, {path: pdfPath[1], filename:`${customer.lastName} 84491.pdf`}, {path: pdfPath[2], filename:`${customer.lastName} 84490.pdf`},{path: pdfPath[3], filename:`${customer.lastName} 86064.pdf`}]),
+      raw: createEmailBodyAttachment("info@tagmycart.com","mjd10m@outlook.com","New TagMyCart Customer", body,[{path: pdfPath[0], filename:`${customer.lastName} 82040.pdf`}, {path: pdfPath[1], filename:`${customer.lastName} 84491.pdf`}, {path: pdfPath[2], filename:`${customer.lastName} 84490.pdf`},{path: pdfPath[3], filename:`${customer.lastName} 86064.pdf`},{path: pdfPath[4], filename:`${customer.lastName} checklist.pdf`}]),
       },
     };
     const response = await gmail.users.messages.send(email);

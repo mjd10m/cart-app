@@ -9,6 +9,7 @@ const { create82040Pdf } = require('../utils/82040pdf');
 const { create84491Pdf } = require('../utils/84491pdf');
 const { create86064Pdf } = require('../utils/86064pdf');
 const { create84490Pdf } = require('../utils/84490pdf');
+const { createChecklistPdf } = require('../utils/checklistpdf');
 
 
 const resolvers = {
@@ -50,7 +51,8 @@ const resolvers = {
         await create84491Pdf('./utils/pdfs/84491.pdf', `/tmp/${customer.lastName}84491.pdf`,customer)
         await create86064Pdf('./utils/pdfs/86064.pdf',`/tmp/${customer.lastName}86064.pdf`,customer)
         await create84490Pdf('./utils/pdfs/84490.pdf', `/tmp/${customer.lastName}84490.pdf`,customer)
-        await sendNewCustomerNotificationEmail(customer,[`/tmp/${customer.lastName}82040.pdf`, `/tmp/${customer.lastName}84491.pdf`, `/tmp/${customer.lastName}84490.pdf`, `/tmp/${customer.lastName}86064.pdf`])
+        await createChecklistPdf('./utils/pdfs/checklist.pdf', `/tmp/${customer.lastName}checklist.pdf`,customer)
+        await sendNewCustomerNotificationEmail(customer,[`/tmp/${customer.lastName}82040.pdf`, `/tmp/${customer.lastName}84491.pdf`, `/tmp/${customer.lastName}84490.pdf`, `/tmp/${customer.lastName}86064.pdf`, `/tmp/${customer.lastName}checklist.pdf`])
         await customerActionEmail(customer, `/tmp/${customer.lastName}82053.pdf`)
         return customer;
       } catch (error) {
