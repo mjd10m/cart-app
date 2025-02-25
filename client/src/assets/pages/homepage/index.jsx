@@ -21,22 +21,22 @@ function Homepage() {
         <Col xs="11" md="5">
           <h5>What does my cart need to be legal?</h5>
           <ul>
-            <li>Headlights</li>
+            <li>DOT windshield</li>
             <li>Front and rear turnsignals</li>
             <li>Taillights</li>
             <li>Headlights</li>
             <li>Red Reflex Reflectors (one on each side one on rear)</li>
             <li>Side mirrors</li>
             <li>Parking Brake</li>
-            <li>Seatbelt for eachseat</li>
+            <li>Seatbelt for each seat</li>
           </ul>
         </Col>
         <Col xs="5">
           <h5>What documents do I need to start the process?</h5>
           <ul>
-            <li>Pictures of cart (All 4Corners)</li>
+            <li>Pictures of cart (All 4 Corners)</li>
             <li>Picture of DOT stamp on windshield</li>
-            <li>Picture of VIN plateon cart</li>
+            <li>Picture of VIN plate on cart</li>
             <li>Picture of Drivers License</li>
             <li>Invoice or bill of sale from where cart was purchased</li>
             <li>Receipts for all parts purchased for DOT</li>
