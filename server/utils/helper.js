@@ -5,6 +5,8 @@ function getPaymentUrl(urlType, dealer) {
         return 'https://www.paypal.com/ncp/payment/VYD5DG9GLQ8JL'
       case "plateTransfer":
         return 'https://www.paypal.com/ncp/payment/V2E7KELWY9WQY'
+      case "titleOnly":
+        return 'https://www.paypal.com/ncp/payment/V2E7KELWY9WQY'
       case "specPlate":
         return 'https://www.paypal.com/ncp/payment/XNH8C7PQMK78Q'
       case "perPlate":
@@ -17,6 +19,8 @@ function getPaymentUrl(urlType, dealer) {
       case "newPlate":
         return 'https://www.paypal.com/ncp/payment/9VNCEDWFXL4G2'
       case "plateTransfer":
+        return 'https://www.paypal.com/ncp/payment/9K9VFCWCH92YA'
+      case "titleOnly":
         return 'https://www.paypal.com/ncp/payment/9K9VFCWCH92YA'
       case "specPlate":
         return 'https://www.paypal.com/ncp/payment/NY4292MPZN3YA'

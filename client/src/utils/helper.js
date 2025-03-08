@@ -16,17 +16,19 @@ const calcPrice = (value, type, setTotalPrice) => {
   switch (type) {
     case 'dealer':
       if (value === "newPlate") {
-        newPrice = '556.85'
+        newPrice = '606.85'
       } else if (value === "plateTransfer") {
         newPrice = '356.85'
+      } else if (value === "titleOnly") {
+        newPrice = '356.85'
       } else if (value === "specPlate") {
-        newPrice = '586.85'
+        newPrice = '636.85'
       } else if (value === "perPlate") {
-        newPrice = '616.85'
+        newPrice = '666.85'
       } else if (value === "perSpecPlate") {
-        newPrice = '646.85'
+        newPrice = '696.85'
       } else {
-        newPrice = '556.85'
+        newPrice = '606.85'
       }
       setTotalPrice(newPrice)
       break;
@@ -34,6 +36,8 @@ const calcPrice = (value, type, setTotalPrice) => {
       if (value === "newPlate") {
         newPrice = '828.35'
       } else if (value === "plateTransfer") {
+        newPrice = '628.35'
+      } else if (value === "titleOnly") {
         newPrice = '628.35'
       } else if (value === "specPlate") {
         newPrice = '858.35'

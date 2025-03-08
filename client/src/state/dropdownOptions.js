@@ -30,6 +30,10 @@ const plateOptions = [
     value: "newPlate"
   },
   {
+    option: "Title Only",
+    value: "titleOnly"
+  },
+  {
     option: "Plate Transfer",
     value: "plateTransfer"
   },

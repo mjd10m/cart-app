@@ -8,6 +8,7 @@ import {plateOptions, passengerOptions} from "../../../state/dropdownOptions"
 import { useNavigate } from 'react-router-dom'
 import IntakeFormGroup from '../../components/intake-form-group';
 import { capitalizeWords } from '../../../utils/helper';
+import { calcPrice } from '../../../utils/helper';
 
 function DealerCustomer({formData, setFormData, totalPrice, setTotalPrice }) {
   const {Formik} = formik
@@ -37,23 +38,7 @@ function DealerCustomer({formData, setFormData, totalPrice, setTotalPrice }) {
       otherwise:() => yup.string().notRequired(),
     })
   })
-  const calcPrice = (value) => {
-    let newPrice
-    if (value === "newPlate") {
-      newPrice = '556.85'
-    } else if (value === "plateTransfer") {
-      newPrice = '356.85'
-    } else if (value === "specPlate") {
-      newPrice = '586.85'
-    } else if (value === "perPlate") {
-      newPrice = '616.85'
-    } else if (value === "perSpecPlate") {
-      newPrice = '646.85'
-    } else {
-      newPrice = '556.85'
-    }
-    setTotalPrice(newPrice)
-  }
+  
   const navigate = useNavigate()
   const nanoid = customAlphabet('1234567890', 10)
   const handleSubmit = (values) => {
@@ -67,7 +52,8 @@ function DealerCustomer({formData, setFormData, totalPrice, setTotalPrice }) {
       addr2:capitalizeWords(values.addr2),
       city:capitalizeWords(values.city), 
       cartColor:capitalizeWords(values.cartColor), 
-      transactionId:id
+      transactionId:id,
+      status:'New'
     })
     navigate('/customerPics')
   }
@@ -75,7 +61,7 @@ function DealerCustomer({formData, setFormData, totalPrice, setTotalPrice }) {
     console.log('formData updated:', formData);
   }, [formData]);
   useEffect(() => {
-    setTotalPrice('556.85');
+    setTotalPrice('606.85');
   }, [setTotalPrice]);
     
   return(
